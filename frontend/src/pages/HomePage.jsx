@@ -14,7 +14,7 @@ const HomePage = () => {
 
   useEffect(() => {
     if (!loggedInUser) {
-      navigate('/users/login'); // Redirect to login if no user is logged in
+      navigate('/users/login'); // Redirect 
     }
   }, [loggedInUser, navigate]);
 

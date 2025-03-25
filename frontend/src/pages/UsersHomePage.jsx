@@ -1,6 +1,6 @@
 import { Container , VStack , Text , SimpleGrid } from '@chakra-ui/react';
 import React, { useEffect } from 'react'
-import { useUserStore } from '@/store/user'; // assuming you created user store
+import { useUserStore } from '@/store/user'; 
 //import Navbar from '@/items/Navbar';
 import UserCard from '@/items/UserCard';
 

@@ -2,7 +2,7 @@ import { Box, Flex, Image, Text, Button, Portal } from "@chakra-ui/react";
 import { useUserStore } from "@/store/user";
 import { useNavigate } from "react-router-dom";
 import {Menu, } from "@chakra-ui/react"
-//import * as Menu from "@chakra-ui/menu"; // assuming you're importing Menu like that — or adjust import if custom
+
 
 const Navbar = () => {
   const { loggedInUser, logout } = useUserStore();

@@ -1,5 +1,5 @@
 import { useColorMode, useColorModeValue } from '@/components/ui/color-mode';
-import { useSubscriptionStore } from '@/store/Subscription'; // <-- update store path if needed
+import { useSubscriptionStore } from '@/store/Subscription'; 
 import { Container, VStack, Heading, Box, Input, Button, Image, HStack } from '@chakra-ui/react';
 import { toaster } from "@/components/ui/toaster";
 import React from 'react';

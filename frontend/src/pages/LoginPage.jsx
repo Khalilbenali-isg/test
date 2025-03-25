@@ -12,7 +12,7 @@ const LoginPage = () => {
   const { loginUser, fetchUsers } = useUserStore();
   const navigate = useNavigate();
 
-  // Fetch users when component mounts
+  
   useEffect(() => {
     fetchUsers();
   }, [fetchUsers]);
@@ -21,7 +21,7 @@ const LoginPage = () => {
     e.preventDefault();
     
     try {
-      // Use the loginUser function from your store
+      
       const result = await loginUser(email, password);
       
       if (result.success) {

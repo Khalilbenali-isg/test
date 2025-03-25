@@ -14,9 +14,9 @@ const ModifyProfile = () => {
 
   useEffect(() => {
     if (!loggedInUser) {
-      navigate('/users/login'); // redirect if not logged in
+      navigate('/users/login'); // redirect 
     } else {
-      // pre-fill form fields with current user data
+      // pre-fill 
       setName(loggedInUser.name);
       setEmail(loggedInUser.email);
       setImage(loggedInUser.image);

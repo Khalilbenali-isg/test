@@ -32,7 +32,7 @@ const RegistrationPage = () => {
         isClosable: true,
       });
       console.log(message);
-      // Reset form after successful registration
+      // Reset 
       setNewUser({
         name: "",
         email: "",
