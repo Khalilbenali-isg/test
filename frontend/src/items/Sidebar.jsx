@@ -12,6 +12,7 @@ const LinkItems = [
   { name: 'login', icon: FiSettings, to: '/users/login' },
   { name: 'subscriptions', icon: FiSettings, to: '/subscriptions' },
   { name: 'modify', icon: FiSettings, to: '/users/ModifyProfile' },
+  { name: 'home', icon: FiSettings, to: '/home' },
 ];
 
 const Sidebar = () => {

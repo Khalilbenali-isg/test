@@ -19,6 +19,11 @@ const productSchema = mongoose.Schema({
         required: true,
         default: 0
     },
+    stock: {
+        type: Number,
+        required: true,
+        default: 0
+    },
 },
 {
     timestamps: true

@@ -83,6 +83,13 @@ const CreatePage = () => {
               value={newProduct.age}
               onChange={(e) => setNewProduct({ ...newProduct, age:Number (e.target.value) })}
             />
+            <Input
+              placeholder="Product stock"
+              name='stock'
+              type='number'
+              value={newProduct.stock}
+              onChange={(e) => setNewProduct({ ...newProduct, stock:Number (e.target.value) })}
+            />
             <Button colorScheme="teal" size="lg" onClick={handleAddProduct} w={"full"}>
               Create Product
             </Button>

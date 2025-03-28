@@ -17,6 +17,8 @@ import { Toaster } from "@/components/ui/toaster"
 import { Flex , Container} from "@chakra-ui/react"
 import RegistrationPage from './pages/RegistrationPage '
 import ModifyProfile from './pages/ModifyProfile'
+import HomePageClt from './pages/HomePageClt'
+
 
 
 
@@ -39,6 +41,7 @@ function App() {
           
           <Routes>
           <Route path="/" element={<HomePage />} />
+          <Route path="/home" element={<HomePageClt />} />
           <Route path="/users" element={<UsersHomePage />} />
           <Route path="/users/create" element={<RegistrationPage />} />
           <Route path="/users/login" element={<LoginPage />} />

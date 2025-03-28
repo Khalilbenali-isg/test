@@ -78,6 +78,9 @@ const ProductCard = ({product}) => {
             <Text fontWeight="bold" fontSize="xl"color={textColor} mb={2}> 
                 ${product.age}
             </Text>
+            <Text fontWeight="bold" fontSize="xl"color={textColor} mb={2}> 
+                ${product.stock}
+            </Text>
             <HStack >
                 <IconButton >
                     <MdDelete onClick={() =>handleDeleteProduct(product._id)}/>
@@ -105,6 +108,10 @@ const ProductCard = ({product}) => {
                                 <Field label="Image URL">
                                     <Input /*ref={ref}*/ placeholder="image" name='image' value={updatedProduct.Image}
                                     onChange={(e)=> setUpdatedProduct({...updatedProduct,Image:e.target.value})}/>
+                                </Field>
+                                <Field label="Stock">
+                                    <Input /*ref={ref}*/ placeholder="stock" name='stock' value={updatedProduct.stock}
+                                    onChange={(e)=> setUpdatedProduct({...updatedProduct,stock:e.target.value})}/>
                                 </Field>
                             </Stack>
                         </DialogBody>

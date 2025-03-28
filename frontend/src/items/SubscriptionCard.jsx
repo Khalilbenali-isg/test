@@ -3,7 +3,7 @@ import { Box, Heading, Text, HStack, IconButton, Button, Input, Stack, Badge } f
 import { MdDelete } from "react-icons/md";
 import { FaEdit } from "react-icons/fa";
 import React, { useState } from 'react';
-import { useSubscriptionStore } from '@/store/subscription';
+import { useSubscriptionStore } from '@/store/Subscription';
 import { toaster } from '@/components/ui/toaster';
 import {
   DialogActionTrigger,
