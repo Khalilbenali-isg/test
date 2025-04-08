@@ -12,7 +12,7 @@ const app = express();
 
 const PORT = process.env.PORT;
 
-app.use(express.json()); // allows us to accept json data in req.body
+app.use(express.json()); 
 
 app.use("/api/products", productRoutes);
 app.use("/api/users", userRoutes);

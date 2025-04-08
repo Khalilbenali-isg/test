@@ -17,7 +17,11 @@ import { Toaster } from "@/components/ui/toaster"
 import { Flex , Container} from "@chakra-ui/react"
 import RegistrationPage from './pages/RegistrationPage '
 import ModifyProfile from './pages/ModifyProfile'
+
 import HomePageClt from './pages/HomePageClt'
+import Cart from './pages/Cart'
+import ProductDetailsPage from './pages/ProductDetailsPage'
+
 
 
 
@@ -41,7 +45,9 @@ function App() {
           
           <Routes>
           <Route path="/" element={<HomePage />} />
+          <Route path="/cart" element={<Cart />} />
           <Route path="/home" element={<HomePageClt />} />
+          
           <Route path="/users" element={<UsersHomePage />} />
           <Route path="/users/create" element={<RegistrationPage />} />
           <Route path="/users/login" element={<LoginPage />} />
@@ -49,7 +55,7 @@ function App() {
           <Route path="/create" element={<CreatePage />} />
           <Route path="/subscriptions" element={<SubscriptionsPage />} />
           <Route path="/subscriptions/create" element={<CreateSub />} />
-          
+          <Route path="/product/:productId" element={<ProductDetailsPage />} />
 
         </Routes>
         </Container>

@@ -20,7 +20,7 @@ export const getProducts = async(req, res) => {
 export const createProduct = async(req, res) => {
     const { name, price, Image, age, stock = 0 } = req.body;
     
-    // Validate required fields
+    
     if (!name || !price || !Image || !age) {
         return res.status(400).json({
             success: false,
@@ -34,7 +34,7 @@ export const createProduct = async(req, res) => {
             price, 
             Image, 
             age, 
-            stock: stock || 0  // Ensure stock has a default of 0
+            stock: stock || 0  
         });
 
         await newProduct.save();
@@ -45,6 +45,39 @@ export const createProduct = async(req, res) => {
         }); 
     } catch(error) {
         console.error("Error creating product:", error);
+        res.status(500).json({
+            success: false, 
+            message: error.message
+        });
+    }
+}
+
+export const getProductById = async (req, res) => {
+    const { id } = req.params;
+
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+        return res.status(404).json({
+            success: false, 
+            message: "Invalid product id"
+        });
+    }
+
+    try {
+        const product = await Product.findById(id);
+
+        if (!product) {
+            return res.status(404).json({
+                success: false, 
+                message: "Product not found"
+            });
+        }
+
+        res.status(200).json({
+            success: true, 
+            data: product
+        });
+    } catch (error) {
+        console.error("Error fetching product:", error);
         res.status(500).json({
             success: false, 
             message: error.message
@@ -143,7 +176,7 @@ export const purchaseProduct = async (req, res) => {
             });
         }
 
-        product.stock -= 1; // Reduce stock
+        product.stock -= 1; 
         await product.save();
 
         res.json({ 

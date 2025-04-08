@@ -2,7 +2,7 @@ import { create } from "zustand";
 
 export const useUserStore = create((set, get) => ({
   users: [],
-  loggedInUser: null, // Track the logged-in user
+  loggedInUser: null, 
   setUsers: (users) => set({ users }),
 
   createUser: async (newUser) => {
@@ -40,14 +40,14 @@ export const useUserStore = create((set, get) => ({
 
   loginUser: async (email, password) => {
     try {
-      // Get current users state
+      
       const { users } = get();
       
-      // Find the user with matching email and password
+      
       const user = users.find((u) => u.email === email && u.password === password);
       
       if (user) {
-        set({ loggedInUser: user }); // Set the logged-in user
+        set({ loggedInUser: user }); 
         return { success: true, message: "Login successful" };
       } else {
         return { success: false, message: "Invalid email or password" };

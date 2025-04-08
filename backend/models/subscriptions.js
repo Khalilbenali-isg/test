@@ -6,7 +6,7 @@ const subscriptionSchema = new mongoose.Schema({
   options: {
     autoSpray: { type: Boolean, default: false },
     heatCalculator: { type: Boolean, default: false },
-    // Add more future options here, for example:
+    
     optionA: { type: Boolean, default: false },
     optionB: { type: Boolean, default: false },
   },

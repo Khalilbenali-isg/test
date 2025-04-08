@@ -31,7 +31,7 @@ const LoginPage = () => {
           type: "success",
           isClosable: true
         });
-        navigate('/');
+        navigate('/home');
       } else {
         toaster.create({
           title: "Error",

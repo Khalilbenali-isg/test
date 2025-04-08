@@ -38,6 +38,27 @@ export const useProductStore = create((set) => ({
       console.error("Error fetching products", error);
     }
   },
+  fetchProductById: async (productId) => {
+    try {
+      const res = await fetch(`/api/products/${productId}`);
+      const data = await res.json();
+      
+      if (!res.ok) {
+        console.error("API error:", res.status, res.statusText);
+        return null;
+      }
+      
+      if (data.success && data.data) {
+        return data.data;
+      } else {
+        console.error("Product fetch unexpected format:", data);
+        return null;
+      }
+    } catch (error) {
+      console.error("Error fetching product:", error);
+      return null;
+    }
+  },
   deleteProduct: async (pid) => {
     try {
       const res = await fetch(`/api/products/${pid}`, {
@@ -65,7 +86,7 @@ export const useProductStore = create((set) => ({
       const data = await res.json();
       if (!data.success) return { success: false, message: data.message };
 
-      // update the ui immediately, without needing a refresh
+      
       set((state) => ({
         products: state.products.map((product) => (product._id === pid ? data.data : product)),
       }));
@@ -78,12 +99,12 @@ export const useProductStore = create((set) => ({
   purchaseProduct: async (pid) => {
     try {
       const res = await fetch(`/api/products/purchase/${pid}`, {
-        method: "PUT", // Changed to PUT to match backend route
+        method: "PUT", 
       });
       const data = await res.json();
       if (!data.success) return { success: false, message: data.message };
 
-      // Update the UI immediately
+     
       set((state) => ({
         products: state.products.map((product) =>
           product._id === pid ? { ...product, stock: data.newStock } : product

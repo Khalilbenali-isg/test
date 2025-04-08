@@ -1,6 +1,6 @@
 import Subscription from '../models/subscriptions.js';
 
-// Create new subscription
+
 export const createSubscription = async (req, res) => {
   try {
     const newSub = await Subscription.create(req.body);
@@ -10,7 +10,7 @@ export const createSubscription = async (req, res) => {
   }
 };
 
-// Get all subscriptions
+
 export const getSubscriptions = async (req, res) => {
   try {
     const subscriptions = await Subscription.find();
@@ -20,7 +20,7 @@ export const getSubscriptions = async (req, res) => {
   }
 };
 
-// Get single subscription
+
 export const getSubscriptionById = async (req, res) => {
   try {
     const sub = await Subscription.findById(req.params.id);
@@ -31,7 +31,7 @@ export const getSubscriptionById = async (req, res) => {
   }
 };
 
-// Update subscription
+
 export const updateSubscription = async (req, res) => {
   try {
     const updatedSub = await Subscription.findByIdAndUpdate(req.params.id, req.body, { new: true });
@@ -42,7 +42,7 @@ export const updateSubscription = async (req, res) => {
   }
 };
 
-// Delete subscription
+
 export const deleteSubscription = async (req, res) => {
   try {
     const deletedSub = await Subscription.findByIdAndDelete(req.params.id);

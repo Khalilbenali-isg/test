@@ -13,6 +13,9 @@ const LinkItems = [
   { name: 'subscriptions', icon: FiSettings, to: '/subscriptions' },
   { name: 'modify', icon: FiSettings, to: '/users/ModifyProfile' },
   { name: 'home', icon: FiSettings, to: '/home' },
+  { name: 'cart', icon: FiSettings, to: '/cart' },
+  { name: 'product', icon: FiSettings, to: '/productdetails' },
+
 ];
 
 const Sidebar = () => {

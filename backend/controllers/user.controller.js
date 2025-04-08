@@ -1,7 +1,7 @@
 import User from '../models/User.js';
 import mongoose from 'mongoose';
 
-// Get all users
+
 export const getUsers = async (req, res) => {
     try {
         const users = await User.find({});
@@ -11,7 +11,7 @@ export const getUsers = async (req, res) => {
     }
 };
 
-// Create a new user
+
 export const createUser = async (req, res) => {
     const { name, email, password, image } = req.body;
     if (!name || !email || !password || !image) {
@@ -26,7 +26,7 @@ export const createUser = async (req, res) => {
     }
 };
 
-// Update a user
+
 export const updateUser = async (req, res) => {
     const { id } = req.params;
     const { name, email, password, image } = req.body;
@@ -41,7 +41,7 @@ export const updateUser = async (req, res) => {
     }
 };
 
-// Delete a user
+
 export const deleteUser = async (req, res) => {
     const { id } = req.params;
     if (!mongoose.Types.ObjectId.isValid(id)) {

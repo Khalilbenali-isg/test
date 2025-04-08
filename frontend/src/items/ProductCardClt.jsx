@@ -1,37 +1,17 @@
-import { useColorModeValue } from '@/components/ui/color-mode';
 import { Box, Image, Heading, Text, Button } from '@chakra-ui/react';
 import React from 'react';
-import { useProductStore } from '@/store/product';
-import { toaster } from '@/components/ui/toaster';
+import { useNavigate } from 'react-router-dom';
 
 const ProductCardClt = ({ product }) => {
+    const navigate = useNavigate();
     
-
-    const { purchaseProduct } = useProductStore(); 
-
-    const handlePurchase = async () => {
-        const response = await purchaseProduct(product._id); 
-        if (response.success) {
-            toaster.create({
-                title: "Success",
-                description: "Product purchased!",
-                type: "success",
-                isClosable: true,
-            });
-        } else {
-            toaster.create({
-                title: "Error",
-                description: response.message,
-                type: "error",
-                isClosable: true,
-            });
-        }
+    const handleViewDetails = () => {
+        navigate(`/product/${product._id}`);
     };
 
     return (
         <Box 
             overflow="hidden" 
-            
             p={6} 
             rounded="lg" 
             shadow="lg" 
@@ -46,18 +26,15 @@ const ProductCardClt = ({ product }) => {
             />
             <Box p={4}>
                 <Heading as="h3" size="md" mb={2}>{product.name}</Heading>
-                <Text fontWeight="bold" fontSize="xl"  mb={2}>{product.name}</Text>
-                <Text>Price: ${product.price}</Text>
+                <Text fontWeight="bold" fontSize="xl" mb={2}>${product.price}</Text>
                 <Text>Stock: {product.stock}</Text>
                 <Button 
-                    
+                    colorScheme="blue"
                     mt={4} 
-                    onClick={handlePurchase} 
-                    isDisabled={product.stock <= 0}
+                    onClick={handleViewDetails}
                 >
-                    {product.stock > 0 ? "Purchase" : "Out of Stock"}
+                    View Details
                 </Button>
-               
             </Box>
         </Box>
     );

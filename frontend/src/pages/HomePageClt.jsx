@@ -3,6 +3,7 @@ import { useEffect } from "react";
 import { useProductStore } from "@/store/product";
 import Navbar from "@/items/Navbar";
 import ProductCardClt from "@/items/ProductCardClt";
+import NavbarClient from "@/items/NavbarClient";
 
 const HomePageClt = () => {
   const { fetchProducts, products } = useProductStore();
@@ -13,11 +14,11 @@ const HomePageClt = () => {
 
   return (
     <>
-      <Navbar />
+      <NavbarClient />
       <Box as="section" id="home" py={20} >
         <Container maxW="container.xl">
           <Flex align="center" justify="space-between" flexDir={{ base: "column", md: "row" }}>
-            <Image src="/your-company-image.jpg" alt="Company" boxSize="400px" borderRadius="xl" />
+            <Image src="https://api.deepai.org/job-view-file/e4691a89-8a68-43b8-8eb3-b0531542a583/outputs/output.jpg" alt="Company" boxSize="400px" borderRadius="xl" />
             <Box ml={{ md: 10 }} mt={{ base: 6, md: 0 }}>
               <Text fontSize="4xl" fontWeight="bold" mb={4}>
                 Welcome to Our Company!

@@ -14,7 +14,7 @@ const ModifyProfile = () => {
 
   useEffect(() => {
     if (!loggedInUser) {
-      navigate('/users/login'); // redirect 
+      navigate('/users/login'); 
     } else {
       // pre-fill 
       setName(loggedInUser.name);

@@ -1,6 +1,6 @@
 import { Container, VStack, Text, SimpleGrid } from "@chakra-ui/react";
 import React, { useEffect } from "react";
-import { useSubscriptionStore } from "@/store/subscription";
+import { useSubscriptionStore } from "@/store/Subscription";
 import NavbarSub from "@/items/NavbarSub";
 import SubscriptionCard from "@/items/SubscriptionCard";
 import { useUserStore } from "@/store/user";
