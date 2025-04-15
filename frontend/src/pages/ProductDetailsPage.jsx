@@ -66,7 +66,7 @@ const ProductDetailsPage = () => {
       return;
     }
     
-    // Check if the product is out of stock
+    
     if (product.stock <= 0) {
       toaster.create({
         title: "Out of stock",
@@ -199,7 +199,7 @@ const ProductDetailsPage = () => {
                   variant="outline"
                   size="lg"
                   width={{ base: "full", md: "auto" }}
-                  onClick={() => navigate("/")}
+                  onClick={() => navigate("/store")}
                 >
                   Back to Products
                 </Button>

@@ -68,10 +68,10 @@ export const useCartStore = create((set, get) => ({
       console.log("Remove from cart response:", data);
       
       if (data.success && data.data && data.data.products) {
-        // Update cart with the products array from the response
+        
         set({ cart: data.data.products || [] });
       } else {
-        // Fallback to manual filtering if response doesn't include products
+        // manual filtering 
         set((state) => ({
           cart: state.cart.filter(item => 
             item.productId._id !== productId

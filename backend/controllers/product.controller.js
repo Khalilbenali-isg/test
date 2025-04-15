@@ -1,5 +1,8 @@
 import Product from '../models/product.js';
 import mongoose from 'mongoose';
+import UserProduct from '../models/UserProduct.js';
+import Subscription from "../models/subscriptions.js";
+
 
 export const getProducts = async(req, res) => {
     try {
@@ -156,39 +159,73 @@ export const deleteProduct = async(req, res) => {
     }
 }
 
+
+
 export const purchaseProduct = async (req, res) => {
     const { id } = req.params;
+    const { userId, subscriptionId , quantity = 1 } = req.body;
   
     try {
-        const product = await Product.findById(id);
-
-        if (!product) {
-            return res.status(404).json({ 
-                success: false, 
-                message: "Product not found" 
-            });
+      const product = await Product.findById(id);
+      if (!product) {
+        return res.status(404).json({ success: false, message: "Product not found" });
+      }
+  
+      if (product.stock < quantity) {
+        return res.status(400).json({ success: false, message: "Not enough stock" });
+      }
+      
+      product.stock -= quantity;
+      await product.save();
+  
+      // subscription duration
+      let expiresAt = null;
+      if (subscriptionId) {
+        const subscription = await Subscription.findById(subscriptionId);
+        if (subscription && subscription.durationInDays) {
+          const now = new Date();
+          expiresAt = new Date(now.getTime() + subscription.durationInDays * 24 * 60 * 60 * 1000);
         }
-
-        if (product.stock <= 0) {
-            return res.status(400).json({ 
-                success: false, 
-                message: "Out of stock" 
-            });
-        }
-
-        product.stock -= 1; 
-        await product.save();
-
-        res.json({ 
-            success: true, 
-            message: "Product purchased successfully", 
-            newStock: product.stock 
-        });
+      }
+  
+      //userProduct with expiration
+      const userProduct = new UserProduct({
+        userId,
+        productId: id,
+        subscriptionId: subscriptionId || null,
+        quantity, 
+        purchasedAt: new Date(),
+        expiresAt,
+      });
+  
+      await userProduct.save();
+  
+      res.json({
+        success: true,
+        message: "Product purchased successfully",
+        newStock: product.stock,
+        userProductId: userProduct._id,
+      });
     } catch (error) {
-        console.error("Error purchasing product:", error);
-        res.status(500).json({ 
-            success: false, 
-            message: "Server error" 
-        });
+      console.error("Error purchasing product:", error);
+      res.status(500).json({ success: false, message: "Server error" });
     }
-};
+  };
+  
+export const assignSubscription = async (req, res) => {
+    const { userProductId } = req.params;
+    const { subscriptionId } = req.body;
+  
+    try {
+      const userProduct = await UserProduct.findById(userProductId);
+      if (!userProduct) return res.status(404).json({ success: false, message: "Not found" });
+  
+      userProduct.subscriptionId = subscriptionId;
+      await userProduct.save();
+  
+      res.json({ success: true, message: "Subscription assigned", data: userProduct });
+    } catch (err) {
+      res.status(500).json({ success: false, message: err.message });
+    }
+  };
+  

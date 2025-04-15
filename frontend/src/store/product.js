@@ -96,21 +96,30 @@ export const useProductStore = create((set) => ({
       return { success: false, message: "Error updating product" };
     }
   },
-  purchaseProduct: async (pid) => {
+  purchaseProduct: async (pid, quantity = 1, userId, subscriptionId) => {
     try {
       const res = await fetch(`/api/products/purchase/${pid}`, {
-        method: "PUT", 
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          quantity,
+          userId,
+          subscriptionId,
+        }),
       });
+  
       const data = await res.json();
       if (!data.success) return { success: false, message: data.message };
-
-     
+  
+      // Update the stock in the state
       set((state) => ({
         products: state.products.map((product) =>
           product._id === pid ? { ...product, stock: data.newStock } : product
         ),
       }));
-
+  
       return { success: true, message: data.message };
     } catch (error) {
       return { success: false, message: "Error purchasing product" };

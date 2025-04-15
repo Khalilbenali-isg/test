@@ -6,6 +6,7 @@ import productRoutes from "./routes/product.route.js";
 import userRoutes from "./routes/user.routes.js";
 import subscriptionsRoutes from './routes/subscriptions.routes.js';
 import cartRoutes from "./routes/cart.routes.js";
+import userProductRoutes from './routes/userProduct.routes.js';
 
 dotenv.config();
 const app = express();
@@ -18,6 +19,7 @@ app.use("/api/products", productRoutes);
 app.use("/api/users", userRoutes);
 app.use('/api/subscriptions', subscriptionsRoutes);
 app.use("/api/cart", cartRoutes);
+app.use("/api/user-products", userProductRoutes);
 
 
 console.log(process.env.MONGO_URI);

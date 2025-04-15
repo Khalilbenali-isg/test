@@ -15,6 +15,9 @@ const LinkItems = [
   { name: 'home', icon: FiSettings, to: '/home' },
   { name: 'cart', icon: FiSettings, to: '/cart' },
   { name: 'product', icon: FiSettings, to: '/productdetails' },
+  { name: 'store', icon: FiSettings, to: '/store' },
+  { name: 'front', icon: FiSettings, to: '/front' },
+  { name: 'UserProductsPage', icon: FiSettings, to: '/UserProductsPage' },
 
 ];
 

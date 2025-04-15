@@ -3,6 +3,7 @@ import mongoose from 'mongoose';
 const subscriptionSchema = new mongoose.Schema({
   name: { type: String, required: true },
   price: { type: Number, required: true },
+  durationInDays: Number,
   options: {
     autoSpray: { type: Boolean, default: false },
     heatCalculator: { type: Boolean, default: false },

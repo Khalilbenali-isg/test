@@ -75,7 +75,7 @@ const Cart = () => {
           <Text fontSize="lg" textAlign="center">
             Your cart is empty.
           </Text>
-          <Button colorScheme="blue" onClick={() => navigate("/")}>
+          <Button colorScheme="blue" onClick={() => navigate("/store")}>
             Browse Products
           </Button>
         </VStack>

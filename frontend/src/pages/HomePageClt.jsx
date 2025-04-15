@@ -4,9 +4,12 @@ import { useProductStore } from "@/store/product";
 import Navbar from "@/items/Navbar";
 import ProductCardClt from "@/items/ProductCardClt";
 import NavbarClient from "@/items/NavbarClient";
+import { Navigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const HomePageClt = () => {
   const { fetchProducts, products } = useProductStore();
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetchProducts();
@@ -44,9 +47,16 @@ const HomePageClt = () => {
               <ProductCardClt key={product._id} product={product} />
             ))}
           </SimpleGrid>
+          
         </Container>
+       
+        
       </Box>
-
+      <Flex align="center" justify="center" flexDir={{ base: "column", md: "row" }}>
+          <Button colorScheme="teal" size="lg" onClick={() => navigate("/store")} mt={6}>
+                  Discover Products
+                </Button>
+        </Flex>
       <Box as="section" id="about" py={20} >
         <Container maxW="container.lg" textAlign="center">
           <Text fontSize="4xl" fontWeight="bold" mb={6}>

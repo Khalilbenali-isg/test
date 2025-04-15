@@ -25,19 +25,20 @@ const Navbar = () => {
         fontSize="2xl"
         fontWeight="bold"
         cursor="pointer"
-        onClick={() => navigate("/")}
+        onClick={() => navigate("/home")}
       >
         My Store
       </Text>
 
       <Flex gap={6}>
-        <Text cursor="pointer" onClick={() => navigate("/home")}>
+      
+        <Text variant="link" cursor="pointer" onClick={() => document.getElementById('products').scrollIntoView({ behavior: 'smooth' })} >
           Store
         </Text>
-        <Text cursor="pointer" onClick={() => navigate("/#about")}>
+        <Text variant="link" cursor="pointer" onClick={() => document.getElementById('about').scrollIntoView({ behavior: 'smooth' })}>
           About Us
         </Text>
-        <Text cursor="pointer" onClick={() => navigate("/#feedback")}>
+        <Text variant="link" cursor="pointer" onClick={() => document.getElementById('footer').scrollIntoView({ behavior: 'smooth' })}>
           Feedback
         </Text>
         

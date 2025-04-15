@@ -21,6 +21,10 @@ import ModifyProfile from './pages/ModifyProfile'
 import HomePageClt from './pages/HomePageClt'
 import Cart from './pages/Cart'
 import ProductDetailsPage from './pages/ProductDetailsPage'
+import Checkout from './pages/Checkout'
+import Store from './pages/Store'
+import Front from './pages/Front'
+import UserProductsPage from './pages/UserProductsPage'
 
 
 
@@ -47,7 +51,10 @@ function App() {
           <Route path="/" element={<HomePage />} />
           <Route path="/cart" element={<Cart />} />
           <Route path="/home" element={<HomePageClt />} />
-          
+          <Route path="/checkout" element={<Checkout />} />
+          <Route path="/store" element={<Store />} />
+          <Route path="/front" element={<Front />} />
+          <Route path="/UserProductsPage" element={<UserProductsPage />} />
           <Route path="/users" element={<UsersHomePage />} />
           <Route path="/users/create" element={<RegistrationPage />} />
           <Route path="/users/login" element={<LoginPage />} />

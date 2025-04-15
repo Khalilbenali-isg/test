@@ -32,7 +32,7 @@ const Navbar = () => {
         }}
       >
         <Text textStyle="3xl" >
-        <Link to={"/"}>Welcome to Chakra UI</Link>
+        <Link to={"/"}>Auto-Plant</Link>
         </Text>
         <HStack spacing={2} alignItems={"center"}>
           <Link to={"/create"}>
