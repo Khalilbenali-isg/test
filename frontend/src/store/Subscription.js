@@ -15,9 +15,18 @@ export const useSubscriptionStore = create((set, get) => ({
 
   createSubscription: async (newSubscription) => {
     try {
+      
+      const token = localStorage.getItem('token');
+      if (!token) {
+        return { success: false, message: "Authentication required" };
+      }
+      
       const res = await fetch("/api/subscriptions", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { 
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
+        },
         body: JSON.stringify(newSubscription),
       });
       const data = await res.json();
@@ -32,8 +41,17 @@ export const useSubscriptionStore = create((set, get) => ({
 
   deleteSubscription: async (id) => {
     try {
+      
+      const token = localStorage.getItem('token');
+      if (!token) {
+        return { success: false, message: "Authentication required" };
+      }
+      
       const res = await fetch(`/api/subscriptions/${id}`, {
         method: "DELETE",
+        headers: {
+          "Authorization": `Bearer ${token}`
+        }
       });
       const data = await res.json();
       if (data.success) {
@@ -49,9 +67,18 @@ export const useSubscriptionStore = create((set, get) => ({
 
   updateSubscription: async (id, updatedSubscription) => {
     try {
+      
+      const token = localStorage.getItem('token');
+      if (!token) {
+        return { success: false, message: "Authentication required" };
+      }
+      
       const res = await fetch(`/api/subscriptions/${id}`, {
         method: "PUT",
-        headers: { "Content-Type": "application/json" },
+        headers: { 
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
+        },
         body: JSON.stringify(updatedSubscription),
       });
       const data = await res.json();

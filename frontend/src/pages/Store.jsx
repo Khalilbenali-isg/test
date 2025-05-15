@@ -88,7 +88,11 @@ const Store = () => {
         <Flex direction="column" gap={4} flex="1" maxW="800px">
          
           <Field.Root>
-            <Box pos="relative" w="250px">
+            <Box pos="relative" w="250px" borderWidth="1px" 
+            borderRadius="md" 
+            p={4} 
+            boxShadow="sm" 
+            >
               <Input 
                 className="peer" 
                 placeholder=" "
@@ -207,7 +211,7 @@ const Store = () => {
 
        
         <Box flex="3">
-          <SimpleGrid columns={{ base: 1, sm: 2, md: 3 }} spacing={10} gap={10}>
+          <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} spacing={20} gap={6} w={"full"}>
             {filteredProducts.length > 0 ? (
               filteredProducts.map((product) => (
                 <ProductCardClt key={product._id || product.id} product={product} />

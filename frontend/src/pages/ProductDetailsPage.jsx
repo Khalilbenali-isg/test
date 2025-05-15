@@ -14,20 +14,34 @@ import {
   HStack,
   Badge,
   Spinner,
+  NumberInput as ChakraNumberInput,
+  NumberInputRoot,
+  NumberInputControl,
+  NumberInputInput,
 } from "@chakra-ui/react";
-import Navbar from "@/items/Navbar";
+import NavbarClient from "@/items/NavbarClient";
 import { toaster } from "@/components/ui/toaster";
 
 const ProductDetailsPage = () => {
+  
   const { productId } = useParams();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [product, setProduct] = useState(null);
-  
+  const [quantity, setQuantity] = useState(1);
+
   const { fetchProductById } = useProductStore();
-  const { addToCart } = useCartStore();
+  const { cart ,addToCart } = useCartStore();
   const { loggedInUser } = useUserStore();
-  
+  console.log("loggedInUser:", loggedInUser);
+  console.log("userId being sent:", loggedInUser?.id);
+
+
+  useEffect(() => {
+    console.log("Updated cart after adding:", cart);
+}, [cart]); 
+
+
   useEffect(() => {
     const getProductDetails = async () => {
       setLoading(true);
@@ -47,12 +61,12 @@ const ProductDetailsPage = () => {
         setLoading(false);
       }
     };
-    
+
     if (productId) {
       getProductDetails();
     }
   }, [productId, fetchProductById]);
-  
+
   const handleAddToCart = async () => {
     if (!loggedInUser) {
       navigate("/users/login");
@@ -65,8 +79,7 @@ const ProductDetailsPage = () => {
       });
       return;
     }
-    
-    
+  
     if (product.stock <= 0) {
       toaster.create({
         title: "Out of stock",
@@ -77,9 +90,12 @@ const ProductDetailsPage = () => {
       });
       return;
     }
-    
+  
     try {
-      const response = await addToCart(loggedInUser._id, product._id, 1);
+      
+      console.log("Adding to cart with quantity:", quantity);
+      
+      const response = await addToCart(loggedInUser._id, product._id, quantity);
       if (response.success) {
         toaster.create({
           title: "Added to cart",
@@ -110,12 +126,11 @@ const ProductDetailsPage = () => {
     }
   };
   
- 
-  
+
   if (loading) {
     return (
       <>
-        <Navbar />
+        <NavbarClient />
         <Container maxW="container.lg" py={10} centerContent>
           <Spinner size="xl" />
           <Text mt={4}>Loading product details...</Text>
@@ -123,31 +138,26 @@ const ProductDetailsPage = () => {
       </>
     );
   }
-  
+
   if (!product) {
     return (
       <>
-        <Navbar />
+        <NavbarClient />
         <Container maxW="container.lg" py={10} centerContent>
           <Heading>Product Not Found</Heading>
-          <Button mt={4} colorScheme="blue" onClick={() => navigate('/')}>
+          <Button mt={4} colorScheme="blue" onClick={() => navigate("/")}>
             Back to Home
           </Button>
         </Container>
       </>
     );
   }
-  
+
   return (
     <>
-      <Navbar />
+      <NavbarClient />
       <Container maxW="container.lg" py={10}>
-        <Box
-          p={6}
-          rounded="lg"
-          shadow="lg"
-          
-        >
+        <Box p={6} rounded="lg" shadow="lg">
           <Box display={{ md: "flex" }} alignItems="center">
             <Box flexShrink={0} width={{ base: "100%", md: "40%" }} mb={{ base: 6, md: 0 }}>
               <Image
@@ -160,30 +170,52 @@ const ProductDetailsPage = () => {
                 maxH="400px"
               />
             </Box>
-            
+
             <VStack alignItems="flex-start" ml={{ md: 8 }} spacing={4} width={{ base: "100%", md: "60%" }}>
               <Heading size="xl">{product.name}</Heading>
-              
+
               <HStack>
                 <Badge colorScheme={product.stock > 0 ? "green" : "red"}>
                   {product.stock > 0 ? "In Stock" : "Out of Stock"}
                 </Badge>
-                
+
                 {product.stock > 0 && (
                   <Text fontSize="sm">
                     {product.stock} {product.stock === 1 ? "item" : "items"} left
                   </Text>
                 )}
               </HStack>
-              
+
               <Text fontSize="2xl" fontWeight="bold" color="blue.500">
                 ${product.price}
               </Text>
-              
-             
-              
+
               <Text fontSize="md">{product.description || "No description available for this product."}</Text>
-              
+
+              {product.stock > 0 && (
+                <HStack>
+                  <Text>Quantity:</Text>
+                  <HStack>
+  <Text>Quantity:</Text>
+  <Button
+    size="sm"
+    onClick={() => setQuantity(Math.max(1, quantity - 1))}
+    isDisabled={quantity <= 1}
+  >
+    -
+  </Button>
+  <Box px={2}>{quantity}</Box>
+  <Button
+    size="sm"
+    onClick={() => setQuantity(Math.min(product.stock, quantity + 1))}
+    isDisabled={quantity >= product.stock}
+  >
+    +
+  </Button>
+</HStack>
+                </HStack>
+              )}
+
               <HStack spacing={4} mt={4} width="100%">
                 <Button
                   colorScheme="blue"
@@ -194,7 +226,7 @@ const ProductDetailsPage = () => {
                 >
                   {product.stock > 0 ? "Add to Cart" : "Out of Stock"}
                 </Button>
-                
+
                 <Button
                   variant="outline"
                   size="lg"

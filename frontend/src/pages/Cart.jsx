@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect ,useState} from "react";
 import { useNavigate } from "react-router-dom";
 import { useCartStore } from "../store/cart";
 import { useUserStore } from "../store/user";
@@ -19,9 +19,36 @@ import { toaster } from "@/components/ui/toaster";
 const Cart = () => {
   const navigate = useNavigate();
   
-  const { loggedInUser } = useUserStore();
+  const { loggedInUser, loadUserFromToken } = useUserStore();
   const { cart, fetchCart, removeFromCart, clearCart } = useCartStore();
+  
+  const [isLoading, setIsLoading] = useState(true); 
+      
+  useEffect(() => {
+    const loadUser = async () => {
+      await loadUserFromToken();
+      setIsLoading(false);
+    };
+    loadUser();
+  }, [loadUserFromToken]);
+  
+  useEffect(() => {
+    if (isLoading) return;
+    
+    if (!loggedInUser) {
+      navigate("/users/login");
+    } else if (loggedInUser._id) {
+      console.log("Logged in user:", loggedInUser);
+      console.log("User ID:", loggedInUser._id);
+      fetchCart(loggedInUser._id);
+    }
+  }, [loggedInUser, isLoading, navigate, fetchCart]);
 
+ /* useEffect(() => {
+    loadUserFromToken();
+  }, [loadUserFromToken]);
+
+  
   useEffect(() => {
     if (!loggedInUser) {
       navigate("/users/login");
@@ -29,7 +56,7 @@ const Cart = () => {
       const userId = loggedInUser._id;
       if (userId) fetchCart(userId);
     }
-  }, [loggedInUser, navigate, fetchCart]);
+  }, [loggedInUser, navigate, fetchCart]);*/
 
   const handleRemove = async (productId) => {
     if (loggedInUser?._id) {
@@ -92,7 +119,7 @@ const Cart = () => {
                 _hover={{ transform: "scale(1.02)", transition: "0.2s" }}
               >
                 <Image
-                  src={item.productId?.Image}
+                  src={`http://localhost:5000/${item.productId?.Image}`}
                   alt={item.productId?.name}
                   boxSize="80px"
                   borderRadius="md"
@@ -127,6 +154,9 @@ const Cart = () => {
               </Button>
               <Button colorScheme="green" onClick={() => navigate("/checkout")}>
                 Proceed to Checkout
+              </Button>
+              <Button colorScheme="green" onClick={() => navigate("/store")}>
+                Continue Shopping
               </Button>
             </HStack>
           </Box>

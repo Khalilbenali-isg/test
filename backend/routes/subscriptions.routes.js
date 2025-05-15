@@ -6,13 +6,14 @@ import {
   updateSubscription,
   deleteSubscription
 } from '../controllers/subscriptions.controller.js';
+import { checkAuth, checkRole } from '../middleware/auth.js';
 
 const router = express.Router();
 
-router.post('/', createSubscription);
+router.post('/',checkAuth,checkRole(['admin']), createSubscription);
 router.get('/', getSubscriptions);
 router.get('/:id', getSubscriptionById);
-router.put('/:id', updateSubscription);
-router.delete('/:id', deleteSubscription);
+router.put('/:id',checkAuth,checkRole(['admin']), updateSubscription);
+router.delete('/:id',checkAuth,checkRole(['admin']), deleteSubscription);
 
 export default router;

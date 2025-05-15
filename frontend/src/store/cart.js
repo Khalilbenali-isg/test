@@ -2,31 +2,21 @@ import { create } from "zustand";
 
 export const useCartStore = create((set, get) => ({
   cart: [],
-  
+
   setCart: (cart) => set({ cart }),
-  
+
   fetchCart: async (userId) => {
-    console.log("Fetching cart for user:", userId);
     try {
-      
-      const userIdToUse = userId || "";
-      
-      const res = await fetch(`/api/cart/${userIdToUse}`);
+      const res = await fetch(`/api/cart/${userId || ""}`);
       if (!res.ok) {
-        console.error("API error:", res.status, res.statusText);
         set({ cart: [] });
         return;
       }
-      
+
       const data = await res.json();
-      console.log("Cart data received:", data);
-      
       if (data.success && data.data && data.data.products) {
-        
         set({ cart: data.data.products });
-        console.log("Cart updated with:", data.data.products);
       } else {
-        console.error("Cart fetch unexpected format:", data);
         set({ cart: [] });
       }
     } catch (error) {
@@ -34,48 +24,53 @@ export const useCartStore = create((set, get) => ({
       set({ cart: [] });
     }
   },
-  
+
   addToCart: async (userId, productId, quantity = 1) => {
     try {
+      
+      console.log("Store received quantity:", quantity);
+      
       const res = await fetch("/api/cart/add", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ userId, productId, quantity }),
       });
-      
+  
       const data = await res.json();
-      console.log("Add to cart response:", data);
+      
+      
+      console.log("Server response:", data);
       
       if (data.success && data.data && data.data.products) {
         
-        set({ cart: data.data.products || [] });
+        set({ cart: data.data.products });
+        
+       
+        console.log("Updated cart:", get().cart);
       }
+      
       return { success: data.success, message: data.message };
     } catch (error) {
       console.error("Error adding to cart:", error);
       return { success: false, message: "Network error" };
     }
   },
+ 
+
   
   removeFromCart: async (userId, productId) => {
-    console.log("Removing product:", productId, "for user:", userId);
     try {
       const res = await fetch(`/api/cart/remove/${userId}/${productId}`, {
         method: "DELETE",
       });
-      
+
       const data = await res.json();
-      console.log("Remove from cart response:", data);
-      
       if (data.success && data.data && data.data.products) {
-        
-        set({ cart: data.data.products || [] });
+        set({ cart: data.data.products });
       } else {
-        // manual filtering 
+        
         set((state) => ({
-          cart: state.cart.filter(item => 
-            item.productId._id !== productId
-          ),
+          cart: state.cart.filter(item => item.productId._id !== productId),
         }));
       }
       return { success: data.success, message: data.message };
@@ -84,16 +79,14 @@ export const useCartStore = create((set, get) => ({
       return { success: false, message: "Network error" };
     }
   },
-  
+
   clearCart: async (userId) => {
     try {
       const res = await fetch(`/api/cart/clear/${userId}`, {
         method: "DELETE",
       });
-      
+
       const data = await res.json();
-      console.log("Clear cart response:", data);
-      
       if (data.success) {
         set({ cart: [] });
       }

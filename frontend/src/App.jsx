@@ -1,9 +1,5 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-//import './App.css'
+
 import { Button, Box } from "@chakra-ui/react"
-import Navbar from './items/Navbar.jsx'
 import Sidebar from './items/Sidebar.jsx'
 import { Routes, Route } from 'react-router-dom'
 import HomePage from './pages/HomePage.jsx'
@@ -25,13 +21,32 @@ import Checkout from './pages/Checkout'
 import Store from './pages/Store'
 import Front from './pages/Front'
 import UserProductsPage from './pages/UserProductsPage'
+import Feedback from './pages/Feedback'
+import RestrictedPage from './pages/RestrictedPage'
+import VerifyEmailPage from './pages/VerifyEmailPage'
+import AdminFeedbackPage from './pages/AdminFeedbackPage'
+import ForgotPassword from './pages/ForgotPassword'
+import ResetPassword from './pages/ResetPassword'
 
+//import { BrowserRouter as Router, Route, Navigate } from 'react-router-dom';
+import { useEffect } from 'react';
+import { useUserStore } from './store/user';
+
+import { ProtectedRoute, RoleProtectedRoute } from './pages/ProtectedRoute';
+import DashboardPage from "./pages/DashboardPage.jsx"
 
 
 
 
 
 function App() {
+  const { loadUserFromToken } = useUserStore();
+
+  useEffect(() => {
+    // Try to load user from token when app starts
+    loadUserFromToken();
+  }, [loadUserFromToken]);
+
   return (
     <>
     <Toaster />
@@ -48,21 +63,44 @@ function App() {
         <Container>
           
           <Routes>
-          <Route path="/" element={<HomePage />} />
+          
           <Route path="/cart" element={<Cart />} />
           <Route path="/home" element={<HomePageClt />} />
           <Route path="/checkout" element={<Checkout />} />
           <Route path="/store" element={<Store />} />
-          <Route path="/front" element={<Front />} />
+          <Route path="/admindashboard" element={<DashboardPage />} />
+          
+          
+          
+          <Route path="/verify" element={<VerifyEmailPage />} />
           <Route path="/UserProductsPage" element={<UserProductsPage />} />
-          <Route path="/users" element={<UsersHomePage />} />
+          <Route path="/Feedback" element={<Feedback />} />
+          <Route path="/restricted" element={<RestrictedPage />} />
+          
           <Route path="/users/create" element={<RegistrationPage />} />
           <Route path="/users/login" element={<LoginPage />} />
           <Route path="/users/ModifyProfile" element={<ModifyProfile />} />
-          <Route path="/create" element={<CreatePage />} />
-          <Route path="/subscriptions" element={<SubscriptionsPage />} />
-          <Route path="/subscriptions/create" element={<CreateSub />} />
+          
+         
+         
           <Route path="/product/:productId" element={<ProductDetailsPage />} />
+
+          <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/reset-password/:token" element={<ResetPassword />} />
+
+          <Route element={<ProtectedRoute />}>
+            
+            
+          </Route>
+          <Route element={<RoleProtectedRoute allowedRoles={['admin']} />}>
+            <Route path="/feedbacks" element={<AdminFeedbackPage />} />
+            <Route path="/subscriptions/create" element={<CreateSub />} />
+            <Route path="/" element={<HomePage />} />
+            <Route path="/front" element={<Front />} />
+            <Route path="/create" element={<CreatePage />} />
+            <Route path="/users" element={<UsersHomePage />} />
+            <Route path="/subscriptions" element={<SubscriptionsPage />} />
+          </Route>
 
         </Routes>
         </Container>

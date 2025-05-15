@@ -7,15 +7,23 @@ import { useUserStore } from "@/store/user";
 import { useNavigate } from "react-router-dom";
 
 const SubscriptionsPage = () => {
-  const { loggedInUser } = useUserStore();
+  const { loggedInUser , loadUserFromToken} = useUserStore();
   const navigate = useNavigate();
   const { fetchSubscriptions, subscriptions } = useSubscriptionStore();
 
-  useEffect(() => {
-    if (!loggedInUser) {
-      navigate("/users/login");
-    }
-  }, [loggedInUser, navigate]);
+ useEffect(() => {
+        loadUserFromToken();
+      }, [loadUserFromToken]);
+    
+    useEffect(() => {
+      if (!loggedInUser) {
+        navigate("/users/login");
+        return;
+      }else {
+        const userId = loggedInUser.id;
+      }
+      console.log("Logged in user:", loggedInUser);
+      console.log(loggedInUser._id);})
 
   useEffect(() => {
     fetchSubscriptions();

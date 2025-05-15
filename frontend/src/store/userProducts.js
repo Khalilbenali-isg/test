@@ -7,24 +7,45 @@ export const useUserProductStore = create((set) => ({
   
   fetchUserProducts: async (userId) => {
     if (!userId) {
-      set({ error: "User ID is required" });
-      return;
+      set({ error: "User ID is required", loading: false });
+      return { success: false, message: "User ID is required" };
     }
     
     try {
       set({ loading: true, error: null });
-      //problem localhost ?????????????????????????????????????????????????????????
-      const res = await fetch(`http://localhost:5173/api/user-products/user/${userId}`);
-
-
+      
+     
+      const token = localStorage.getItem('token');
+      
+      if (!token) {
+        set({ loading: false, error: "Authentication required" });
+        return { success: false, message: "Authentication required" };
+      }
+      
+      const res = await fetch(`/api/user-products/user/${userId}`, {
+        headers: {
+          "Authorization": `Bearer ${token}`
+        }
+      });
+      
+      // Handle non-JSON responses
+      const contentType = res.headers.get("content-type");
+      if (!contentType || !contentType.includes("application/json")) {
+        set({ 
+          loading: false, 
+          error: `Server error: ${res.status} ${res.statusText}` 
+        });
+        return { success: false, message: "Invalid server response format" };
+      }
+      
       const data = await res.json();
       
       if (!res.ok) {
         set({ 
           loading: false, 
-          error: data.message || "Failed to fetch your products" 
+          error: data.message || `Failed to fetch products (${res.status})` 
         });
-        return;
+        return { success: false, message: data.message || "Failed to fetch products" };
       }
       
       set({ 
@@ -32,17 +53,18 @@ export const useUserProductStore = create((set) => ({
         loading: false
       });
       
-      return data.data;
+      return { success: true, data: data.data };
     } catch (error) {
       console.error("Error fetching user products:", error);
       set({ 
         loading: false, 
         error: "Failed to load your products. Please try again later." 
       });
+      return { success: false, message: error.message };
     }
   },
   
   clearUserProducts: () => {
     set({ userProducts: [], loading: false, error: null });
   }
-}));
+}))

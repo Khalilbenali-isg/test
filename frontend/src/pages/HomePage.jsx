@@ -4,20 +4,38 @@ import { useProductStore } from '@/store/product';
 import Navbar from '@/items/Navbar';
 import ProductCard from '@/items/ProductCard';
 import { useUserStore } from '@/store/user';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 const HomePage = () => {
-  const { loggedInUser } = useUserStore();
+  const { loggedInUser, loadUserFromToken } = useUserStore();
   const navigate = useNavigate();
   const { fetchProducts, products } = useProductStore();
   console.log(loggedInUser)
+  const token = localStorage.getItem('token');
+  console.log("Token:", token);
+
+  
+
+  
+  
 
   useEffect(() => {
-    if (!loggedInUser) {
-      navigate('/users/login'); // Redirect 
-    }
-  }, [loggedInUser, navigate]);
+       loadUserFromToken();
+     }, [loadUserFromToken]);
+   
+   useEffect(() => {
+     if (!loggedInUser) {
+       navigate("/users/login");
+       return;
+     }else {
+       const userId = loggedInUser.id;
+     }
+     
+     })
 
+ 
+
+  
   useEffect(() => {
     fetchProducts();
   }, [fetchProducts]);

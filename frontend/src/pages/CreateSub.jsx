@@ -10,11 +10,13 @@ const CreateSubscriptionPage = () => {
   const [newSubscription, setNewSubscription] = React.useState({
     name: "",
     price: "",
+    durationInDays: "",
     options: {
       autoSpray: false,
       heatCalculator: false,
       optionA: false,
       optionB: false,
+      
     },
   });
 
@@ -80,15 +82,25 @@ const CreateSubscriptionPage = () => {
               value={newSubscription.price}
               onChange={(e) => setNewSubscription({ ...newSubscription, price: Number(e.target.value) })}
             />
+            <Input
+              placeholder="Duration in Days"
+              type="number"
+              value={newSubscription.durationInDays}
+              onChange={(e) =>
+                setNewSubscription({ ...newSubscription, durationInDays: Number(e.target.value) })
+              }
+            />
+
             <HStack gap={4} wrap="wrap">
               {["autoSpray", "heatCalculator", "optionA", "optionB"].map((option) => (
-                <CheckboxCard.Root
-                  key={option}
-                  maxW="180px"
-                  isChecked={newSubscription.options[option]}
-                  onClick={() => handleCheckboxChange(option)}
-                  cursor="pointer"
-                >
+               <CheckboxCard.Root
+               key={option}
+               maxW="180px"
+               isChecked={newSubscription.options[option]}
+               onCheckedChange={(checked) => handleCheckboxChange(option)}
+               cursor="pointer"
+             >
+             
                   <CheckboxCard.HiddenInput />
                   <CheckboxCard.Control>
                     <CheckboxCard.Label textTransform="capitalize">

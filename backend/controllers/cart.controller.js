@@ -13,28 +13,17 @@ export const getCart = async (req, res) => {
     }
 };
 
-
 export const addToCart = async (req, res) => {
     const { userId, productId, quantity } = req.body;
     try {
-        // check if in stock
         const product = await Product.findById(productId);
-        
         if (!product) {
-            return res.status(404).json({ 
-                success: false, 
-                message: "Product not found" 
-            });
+            return res.status(404).json({ success: false, message: "Product not found" });
         }
-        
         if (product.stock <= 0) {
-            return res.status(400).json({ 
-                success: false, 
-                message: "This product is out of stock" 
-            });
+            return res.status(400).json({ success: false, message: "This product is out of stock" });
         }
-        
-        // adding if in stock
+
         let cart = await Cart.findOne({ userId });
 
         if (!cart) {
@@ -49,20 +38,11 @@ export const addToCart = async (req, res) => {
         }
 
         await cart.save();
-        
-        // Populate 
         await cart.populate("products.productId");
-        
-        res.status(200).json({ 
-            success: true, 
-            message: "Product added to cart", 
-            data: cart 
-        });
+
+        res.status(200).json({ success: true, message: "Product added to cart", data: cart });
     } catch (error) {
-        res.status(500).json({ 
-            success: false, 
-            message: error.message 
-        });
+        res.status(500).json({ success: false, message: error.message });
     }
 };
 
@@ -75,6 +55,7 @@ export const removeFromCart = async (req, res) => {
 
         cart.products = cart.products.filter(p => p.productId.toString() !== productId);
         await cart.save();
+        await cart.populate("products.productId");
 
         res.status(200).json({ success: true, message: "Product removed from cart", data: cart });
     } catch (error) {

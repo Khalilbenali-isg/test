@@ -1,19 +1,76 @@
-import { Box, Container, Flex, Image, Text, Button, VStack, SimpleGrid, Card, CardBody } from "@chakra-ui/react";
-import { useEffect } from "react";
+import { Box, Container, Flex, Image, Text, Button, VStack, SimpleGrid } from "@chakra-ui/react";
+import { useEffect, useState } from "react";
 import { useProductStore } from "@/store/product";
+import { useUserStore } from "@/store/user";
+import useFeedbackStore from "@/store/feedback";
 import Navbar from "@/items/Navbar";
 import ProductCardClt from "@/items/ProductCardClt";
 import NavbarClient from "@/items/NavbarClient";
-import { Navigate } from "react-router-dom";
+import FeedbackCard from "@/items/FeedbackCard";
 import { useNavigate } from "react-router-dom";
+import FeedbackPopoverForm from "@/items/FeedbackPopoverForm";
+import { Toaster, toaster } from "@/components/ui/toaster"
+
 
 const HomePageClt = () => {
   const { fetchProducts, products } = useProductStore();
+  const { loggedInUser } = useUserStore();
+  const { feedbacks, fetchFeedbacks, createFeedback } = useFeedbackStore();
+  const [newFeedback, setNewFeedback] = useState("");
   const navigate = useNavigate();
+  const [randomProducts, setRandomProducts] = useState([]);
+  const [randomFeedbacks, setRandomFeedbacks] = useState([]);
+  
 
   useEffect(() => {
     fetchProducts();
-  }, [fetchProducts]);
+    fetchFeedbacks();
+  }, [fetchProducts, fetchFeedbacks]);
+  
+  useEffect(() => {
+    if (products.length > 0) {
+      const shuffled = [...products].sort(() => 0.5 - Math.random());
+      setRandomProducts(shuffled.slice(0, 3));
+    }
+  }, [products]);
+  
+  useEffect(() => {
+    const verified = feedbacks.filter((fb) => fb.Verified);
+    if (verified.length > 0) {
+      const shuffled = [...verified].sort(() => 0.5 - Math.random());
+      setRandomFeedbacks(shuffled.slice(0, 3));
+    }
+  }, [feedbacks]);
+  
+  
+  const handleSubmitFeedback = async (e) => {
+    e.preventDefault();
+    if (!newFeedback.trim()) {
+      toaster.create({
+        title: "Please enter a feedback message",
+        type: "warning",
+      });
+      return;
+    }
+
+    const success = await createFeedback(loggedInUser?._id, newFeedback);
+    
+    if (success) {
+      toaster.create({
+        title: "Your feedback has been submitted",
+        type: "success",
+      });
+      setNewFeedback("");
+    } else {
+      toaster.create({
+        title: "Failed to submit feedback",
+        type: "error",
+      });
+    }
+  };
+
+  
+  
 
   return (
     <>
@@ -21,7 +78,8 @@ const HomePageClt = () => {
       <Box as="section" id="home" py={20} >
         <Container maxW="container.xl">
           <Flex align="center" justify="space-between" flexDir={{ base: "column", md: "row" }}>
-            <Image src="https://api.deepai.org/job-view-file/e4691a89-8a68-43b8-8eb3-b0531542a583/outputs/output.jpg" alt="Company" boxSize="400px" borderRadius="xl" />
+            
+            <Image src="https://cheekyplantco.com.au/cdn/shop/files/cheekyplantco_sq_primarylogo_cloudonfern_1200x1200.png?v=1695033305" alt="Company" boxSize="400px" borderRadius="xl" />
             <Box ml={{ md: 10 }} mt={{ base: 6, md: 0 }}>
               <Text fontSize="4xl" fontWeight="bold" mb={4}>
                 Welcome to Our Company!
@@ -37,26 +95,53 @@ const HomePageClt = () => {
         </Container>
       </Box>
 
-      <Box as="section" id="products" py={20} >
-        <Container maxW="container.xl">
+     <Box as="section" id="products" py={20} >
+  <Container maxW="container.xl">
+    <Text fontSize="4xl" fontWeight="bold" mb={10} textAlign="center">
+      Our Top Products
+    </Text>
+    <SimpleGrid columns={{ base: 1, md: 3 }} spacing={10} gap={10}>
+      {randomProducts.map((product) => (
+        <ProductCardClt key={product._id} product={product} />
+      ))}
+    </SimpleGrid>
+  </Container>
+</Box>
+      
+      <Flex align="center" justify="center" flexDir={{ base: "column", md: "row" }}>
+        <Button colorScheme="teal" size="lg" onClick={() => navigate("/store")} mt={6}>
+          Discover Products
+        </Button>
+      </Flex>
+      
+      <Box as="section" id="feedback" py={20} >
+        <Container maxW="container.xl"  >
           <Text fontSize="4xl" fontWeight="bold" mb={10} textAlign="center">
-            Our Top Products
+            What Our Clients Say
           </Text>
-          <SimpleGrid columns={{ base: 1, md: 3 }} spacing={10} gap={10}>
-            {products.slice(0, 3).map((product) => (
-              <ProductCardClt key={product._id} product={product} />
-            ))}
+          
+         
+          <SimpleGrid columns={{ base: 1, md: 3 }} spacing={10} mb={16} gap={10}>
+          {randomFeedbacks.length > 0 ? (
+              randomFeedbacks.map((feedback) => (
+                <FeedbackCard key={feedback._id} feedback={feedback} />
+              ))
+            ) : (
+              <Box gridColumn="span 3" textAlign="center">
+                <Text color="gray.500">No feedback available yet. Be the first to leave a review!</Text>
+              </Box>
+            )}
           </SimpleGrid>
+          <Flex align="center" justify="center" flexDir={{ base: "column", md: "row" }}> 
+            <FeedbackPopoverForm  />
+           </Flex>
+          
+
+          
           
         </Container>
-       
-        
       </Box>
-      <Flex align="center" justify="center" flexDir={{ base: "column", md: "row" }}>
-          <Button colorScheme="teal" size="lg" onClick={() => navigate("/store")} mt={6}>
-                  Discover Products
-                </Button>
-        </Flex>
+
       <Box as="section" id="about" py={20} >
         <Container maxW="container.lg" textAlign="center">
           <Text fontSize="4xl" fontWeight="bold" mb={6}>
@@ -69,9 +154,7 @@ const HomePageClt = () => {
         </Container>
       </Box>
 
-      
-
-      <Box as="footer" id="footer" py={10}  >
+      <Box as="footer" id="footer" py={10}>
         <Container maxW="container.xl" textAlign="center">
           <Text fontSize="lg" mb={4}>© {new Date().getFullYear()} Your Company. All rights reserved.</Text>
           <Flex justify="center" gap={6}>

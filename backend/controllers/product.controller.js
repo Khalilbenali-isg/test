@@ -2,14 +2,22 @@ import Product from '../models/product.js';
 import mongoose from 'mongoose';
 import UserProduct from '../models/UserProduct.js';
 import Subscription from "../models/subscriptions.js";
-
+import fs from 'fs';
+import path from 'path';
 
 export const getProducts = async(req, res) => {
     try {
         const products = await Product.find({});
+        
+        // Transform image paths to full URLs
+        const productsWithFullImageUrls = products.map(product => ({
+            ...product.toObject(),
+            Image: product.Image ? `/api/products/image/${path.basename(product.Image)}` : null
+        }));
+
         res.status(200).json({
             success: true, 
-            data: products
+            data: productsWithFullImageUrls
         });
     } catch (error) {
         console.error("Error fetching products:", error);
@@ -21,32 +29,63 @@ export const getProducts = async(req, res) => {
 }
 
 export const createProduct = async(req, res) => {
-    const { name, price, Image, age, stock = 0 } = req.body;
+    const { name, price, age, stock = 0 } = req.body;
     
     
-    if (!name || !price || !Image || !age) {
+    if (!req.file) {
+        console.error('No file uploaded');
         return res.status(400).json({
             success: false,
-            message: 'Name, price, image, and age are required'
+            message: 'Image is required'
+        });
+    }
+    
+    if (!name || !price || !age) {
+        
+        if (req.file) {
+            try {
+                fs.unlinkSync(req.file.path);
+            } catch (err) {
+                console.error('Error removing uploaded file:', err);
+            }
+        }
+        return res.status(400).json({
+            success: false,
+            message: 'Name, price, and age are required'
         });
     }
 
     try {
+       
+        const imagePath = req.file.path.replace(/\\/g, '/');
+
         const newProduct = new Product({
             name, 
             price, 
-            Image, 
+            Image: imagePath, 
             age, 
             stock: stock || 0  
         });
 
         await newProduct.save();
         
+       
+        const productResponse = newProduct.toObject();
+        productResponse.Image = `/api/products/image/${path.basename(imagePath)}`;
+        
         res.status(201).json({
             success: true, 
-            data: newProduct
+            data: productResponse
         }); 
     } catch(error) {
+       
+        if (req.file) {
+            try {
+                fs.unlinkSync(req.file.path);
+            } catch (err) {
+                console.error('Error removing uploaded file:', err);
+            }
+        }
         console.error("Error creating product:", error);
         res.status(500).json({
             success: false, 
@@ -75,9 +114,15 @@ export const getProductById = async (req, res) => {
             });
         }
 
+        // Transform image path to full URL
+        const productResponse = product.toObject();
+        productResponse.Image = product.Image 
+            ? `/api/products/image/${path.basename(product.Image)}` 
+            : null;
+
         res.status(200).json({
             success: true, 
-            data: product
+            data: productResponse
         });
     } catch (error) {
         console.error("Error fetching product:", error);
@@ -88,40 +133,100 @@ export const getProductById = async (req, res) => {
     }
 }
 
-export const updateProduct = async(req, res) => {
+export const updateProduct = async (req, res) => {
     const { id } = req.params;
-    const { name, price, Image, age, stock } = req.body;
 
     if (!mongoose.Types.ObjectId.isValid(id)) {
-        return res.status(404).json({
-            success: false, 
-            message: "Invalid product id"
-        });
+        if (req.file) fs.unlinkSync(req.file.path);
+        return res.status(400).json({ success: false, message: "Invalid product ID" });
     }
 
     try {
+       
+        console.log('Update request for product ID:', id);
+        console.log('Request body:', req.body);
+        console.log('Request file:', req.file);
+
+        const existingProduct = await Product.findById(id);
+        if (!existingProduct) {
+            if (req.file) fs.unlinkSync(req.file.path);
+            return res.status(404).json({ success: false, message: "Product not found" });
+        }
+
+        
+        let { name, price, age, stock } = req.body;
+        
+        
+        const updateData = {};
+        
+       
+        if (name) updateData.name = name;
+        if (price !== undefined && price !== '') updateData.price = Number(price);
+        if (age !== undefined && age !== '') updateData.age = Number(age);
+        if (stock !== undefined && stock !== '') updateData.stock = Number(stock);
+
+        
+        if (req.file) {
+            //delete old
+            if (existingProduct.Image) {
+                try {
+                    fs.unlinkSync(existingProduct.Image);
+                } catch (err) {
+                    console.error('Error deleting old image:', err);
+                    
+                }
+            }
+            updateData.Image = req.file.path.replace(/\\/g, '/');
+        }
+
+       
+        console.log('Final update data to be applied:', JSON.stringify(updateData));
+        console.log('Update data keys:', Object.keys(updateData));
+        console.log('Update data values:', Object.values(updateData));
+
+       
+        if (Object.keys(updateData).length === 0 && !req.file) {
+            return res.status(400).json({
+                success: false,
+                message: "No valid fields provided for update"
+            });
+        }
+
+       
         const updatedProduct = await Product.findByIdAndUpdate(
-            id, 
-            { name, price, Image, age, stock }, 
+            id,
+            { $set: updateData },
             { new: true, runValidators: true }
         );
 
         if (!updatedProduct) {
-            return res.status(404).json({
-                success: false, 
-                message: "Product not found"
-            });
+            throw new Error('Update operation failed');
         }
 
+       
         res.status(200).json({
-            success: true, 
-            data: updatedProduct
+            success: true,
+            data: {
+                ...updatedProduct.toObject(),
+                Image: updatedProduct.Image 
+                    ? `/api/products/image/${path.basename(updatedProduct.Image)}`
+                    : null
+            }
         });
+
     } catch (error) {
-        console.error("Error updating product:", error);
+       
+        if (req.file) {
+            try {
+                fs.unlinkSync(req.file.path);
+            } catch (err) {
+                console.error('Error removing uploaded file:', err);
+            }
+        }
+        console.error('Update error:', error);
         res.status(500).json({
-            success: false, 
-            message: error.message
+            success: false,
+            message: error.message || 'Update failed'
         });
     }
 }
@@ -146,6 +251,15 @@ export const deleteProduct = async(req, res) => {
             });
         }
 
+        // Remove the associated image file
+        if (deletedProduct.Image) {
+            try {
+                fs.unlinkSync(deletedProduct.Image);
+            } catch (err) {
+                console.log('Product image file not found or could not be deleted');
+            }
+        }
+
         res.status(200).json({
             success: true, 
             message: 'Product deleted successfully'
@@ -159,7 +273,20 @@ export const deleteProduct = async(req, res) => {
     }
 }
 
-
+/*export const getProductImage = (req, res) => {
+    const { filename } = req.params;
+    const filePath = path.join(process.cwd(), 'uploads/products', filename);
+    
+    
+    if (!fs.existsSync(filePath)) {
+        return res.status(404).json({
+            success: false,
+            message: 'Image not found'
+        });
+    }
+    
+    res.sendFile(filePath);
+}*/
 
 export const purchaseProduct = async (req, res) => {
     const { id } = req.params;
@@ -188,7 +315,7 @@ export const purchaseProduct = async (req, res) => {
         }
       }
   
-      //userProduct with expiration
+      
       const userProduct = new UserProduct({
         userId,
         productId: id,
@@ -210,7 +337,7 @@ export const purchaseProduct = async (req, res) => {
       console.error("Error purchasing product:", error);
       res.status(500).json({ success: false, message: "Server error" });
     }
-  };
+};
   
 export const assignSubscription = async (req, res) => {
     const { userProductId } = req.params;
@@ -227,5 +354,4 @@ export const assignSubscription = async (req, res) => {
     } catch (err) {
       res.status(500).json({ success: false, message: err.message });
     }
-  };
-  
+};

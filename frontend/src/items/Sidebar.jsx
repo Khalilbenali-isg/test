@@ -18,7 +18,8 @@ const LinkItems = [
   { name: 'store', icon: FiSettings, to: '/store' },
   { name: 'front', icon: FiSettings, to: '/front' },
   { name: 'UserProductsPage', icon: FiSettings, to: '/UserProductsPage' },
-
+  { name: 'Feedbacks', icon: FiSettings, to: '/feedbacks' },
+  { name: 'stats', icon: FiSettings, to: '/admindashboard' },
 ];
 
 const Sidebar = () => {
