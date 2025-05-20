@@ -28,7 +28,7 @@ export const useUserProductStore = create((set) => ({
         }
       });
       
-      // Handle non-JSON responses
+     
       const contentType = res.headers.get("content-type");
       if (!contentType || !contentType.includes("application/json")) {
         set({ 

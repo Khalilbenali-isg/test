@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { jwtDecode } from "jwt-decode"; // Make sure to import jwtDecode
+import { jwtDecode } from "jwt-decode"; 
 
 export const useUserStore = create((set, get) => ({
   users: [],
@@ -10,10 +10,10 @@ export const useUserStore = create((set, get) => ({
     const token = localStorage.getItem('token');
     if (token) {
       try {
-        // First decode the token to get the basic user info
+        
         const decoded = jwtDecode(token);
         
-        // Check if we have an ID (could be either id or _id in the token)
+        
         const userId = decoded.id || decoded._id;
         
         if (!userId) {
@@ -21,7 +21,7 @@ export const useUserStore = create((set, get) => ({
           return;
         }
         
-        // Now fetch the complete user profile using the ID from the token
+        
         const res = await fetch(`/api/users/${userId}`, {
           headers: {
             "Authorization": `Bearer ${token}`
@@ -31,19 +31,18 @@ export const useUserStore = create((set, get) => ({
         if (res.ok) {
           const userData = await res.json();
           if (userData.success && userData.data) {
-            // Set the complete user data including the image, name, etc.
+            
             set({ loggedInUser: userData.data });
            
           } else {
-            // If we can't get the complete profile, at least set the basic info
-            // Make sure we maintain a consistent structure
+            
             set({ 
               loggedInUser: {
                 _id: userId,
-                id: userId, // Include both formats to be safe
+                id: userId, 
                 email: decoded.email,
                 role: decoded.role,
-                // Add placeholder for other fields so UI won't break
+                
                 name: decoded.name || "User",
                 image: decoded.image || "",
                 Verified: decoded.Verified || true
@@ -52,7 +51,7 @@ export const useUserStore = create((set, get) => ({
           }
         } else {
           console.error("Error fetching complete user profile:", res.status);
-          // Fallback to just the decoded token info with consistent structure
+          
           set({ 
             loggedInUser: {
               _id: userId,
@@ -84,11 +83,11 @@ export const useUserStore = create((set, get) => ({
       formData.append("email", email);
       formData.append("password", password);
       formData.append("role", role || "client");
-      formData.append("image", image); // image should be a File object
+      formData.append("image", image); 
   
       const res = await fetch("/api/users", {
         method: "POST",
-        body: formData, // Let browser set Content-Type automatically
+        body: formData, 
       });
   
       const data = await res.json();
@@ -139,20 +138,20 @@ export const useUserStore = create((set, get) => ({
 
   fetchUsers: async () => {
     try {
-      // Get the authentication token from localStorage
+      
       const token = localStorage.getItem('token');
       
-      // Make the request - token is required now that we added checkAuth
+      
       const res = await fetch("/api/users", {
         headers: {
           "Authorization": token ? `Bearer ${token}` : ''
         }
       });
       
-      // Handle authentication errors
+     
       if (res.status === 401) {
         console.log("Authentication required to fetch users");
-        set({ users: [] }); // Clear users on auth error
+        set({ users: [] }); 
         return { success: false, message: "Authentication required" };
       }
       
@@ -161,7 +160,7 @@ export const useUserStore = create((set, get) => ({
         return { success: false, message: "Access denied. Insufficient permissions." };
       }
       
-      // Parse response
+      
       if (res.ok) {
         const data = await res.json();
         set({ users: data.data });
@@ -186,19 +185,19 @@ export const useUserStore = create((set, get) => ({
       });
   
       const data = await res.json();
-      console.log("Backend response:", data); // Log the full response for debugging
+      console.log("Backend response:", data); 
   
       if (!data.success) {
         return { success: false, message: data.message };
       }
   
-      // Ensure that user data exists and Verified field is available
+      
       if (!data.data || typeof data.data.Verified === 'undefined') {
         console.error("User data is missing or verification status is undefined.");
         return { success: false, message: "Error: User data is missing or verification status is undefined." };
       }
   
-      // Check if user is verified
+     
       if (!data.data.Verified) {
         return { 
           success: false, 
@@ -208,9 +207,9 @@ export const useUserStore = create((set, get) => ({
         };
       }
   
-      // Store the token and set logged-in user in the store
-      localStorage.setItem('token', data.data.token); // Store the token in localStorage
-      set({ loggedInUser: data.data }); // Store user data in the store
+      
+      localStorage.setItem('token', data.data.token); 
+      set({ loggedInUser: data.data }); 
   
       return { success: true, message: "Login successful", role: data.data.role };
   
@@ -232,7 +231,7 @@ export const useUserStore = create((set, get) => ({
 
   deleteUser: async (userId) => {
     try {
-      // Get the authentication token from localStorage
+     
       const token = localStorage.getItem('token');
       
       if (!token) {
@@ -242,7 +241,7 @@ export const useUserStore = create((set, get) => ({
       const res = await fetch(`/api/users/${userId}`, {
         method: "DELETE",
         headers: {
-          "Authorization": `Bearer ${token}` // Include the token in the Authorization header
+          "Authorization": `Bearer ${token}` 
         }
       });
       
@@ -295,11 +294,11 @@ export const useUserStore = create((set, get) => ({
         headers: {
           "Authorization": `Bearer ${token}`,
         },
-        body: updatedUser, // FormData is passed directly
+        body: updatedUser, 
       });
   
       const data = await res.json();
-      console.log("Backend response:", data); // Add this line
+      console.log("Backend response:", data); 
   
       if (!data.success) return { success: false, message: data.message };
   
@@ -450,7 +449,7 @@ changePassword: async (currentPassword, newPassword, confirmPassword) => {
 },
 
   logout: () => {
-    localStorage.removeItem('token');  // Remove the JWT token
+    localStorage.removeItem('token');  
     set({ loggedInUser: null });
   }
 }));

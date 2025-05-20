@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Box, SimpleGrid, Heading, Flex, Button, Field, Input, defineStyle } from '@chakra-ui/react';
 import ProductCardClt from '@/items/ProductCardClt';
 import NavbarClient from '@/items/NavbarClient';
+import { RevealWrapper } from  'next-reveal'
 
 const floatingStyles = defineStyle({
   pos: "absolute",
@@ -84,7 +85,7 @@ const Store = () => {
       <NavbarClient />
       
       <Flex mb={6} gap={4} flexWrap="wrap" alignItems="flex-start">
-        
+      <RevealWrapper origin='left' delay={0} duration={1000} distance='300px' reset={false}>
         <Flex direction="column" gap={4} flex="1" maxW="800px">
          
           <Field.Root>
@@ -208,9 +209,11 @@ const Store = () => {
             Clear Filters
           </Button>
         </Flex>
+        </RevealWrapper>
 
-       
+        
         <Box flex="3">
+        <RevealWrapper origin='right' delay={0} duration={1000} distance='300px' reset={false}>
           <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} spacing={20} gap={6} w={"full"}>
             {filteredProducts.length > 0 ? (
               filteredProducts.map((product) => (
@@ -220,7 +223,9 @@ const Store = () => {
               <Box>No products found</Box>
             )}
           </SimpleGrid>
+          </RevealWrapper>
         </Box>
+        
       </Flex>
     </Box>
   );

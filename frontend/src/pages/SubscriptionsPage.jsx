@@ -1,63 +1,78 @@
-import { Container, VStack, Text, SimpleGrid } from "@chakra-ui/react";
+import { Box, Flex, VStack, Text, SimpleGrid } from "@chakra-ui/react";
 import React, { useEffect } from "react";
 import { useSubscriptionStore } from "@/store/Subscription";
 import NavbarSub from "@/items/NavbarSub";
 import SubscriptionCard from "@/items/SubscriptionCard";
 import { useUserStore } from "@/store/user";
 import { useNavigate } from "react-router-dom";
+import Sidebar from "@/items/Sidebar";
 
 const SubscriptionsPage = () => {
-  const { loggedInUser , loadUserFromToken} = useUserStore();
+  const { loggedInUser, loadUserFromToken } = useUserStore();
   const navigate = useNavigate();
   const { fetchSubscriptions, subscriptions } = useSubscriptionStore();
 
- useEffect(() => {
-        loadUserFromToken();
-      }, [loadUserFromToken]);
-    
-    useEffect(() => {
-      if (!loggedInUser) {
-        navigate("/users/login");
-        return;
-      }else {
-        const userId = loggedInUser.id;
-      }
-      console.log("Logged in user:", loggedInUser);
-      console.log(loggedInUser._id);})
+  useEffect(() => {
+    loadUserFromToken();
+  }, [loadUserFromToken]);
+
+  useEffect(() => {
+    if (!loggedInUser) {
+      navigate("/users/login");
+      return;
+    } else {
+      const userId = loggedInUser.id;
+    }
+    console.log("Logged in user:", loggedInUser);
+    console.log(loggedInUser._id);
+  });
 
   useEffect(() => {
     fetchSubscriptions();
   }, [fetchSubscriptions]);
 
   return (
-    <Container maxW="container.xl" py={12}>
+    <Box>
       <NavbarSub />
-      <VStack spacing={8}>
-        <Text
-          fontSize="5xl"
-          fontWeight="bold"
-          textAlign="center"
-          bgGradient={"linear(to-l, #7928CA,#FF0080)"}
+      <Flex>
+        
+        <Box 
+          w={{ base: "70px", md: "250px" }} 
+          position="sticky"
+          top="0"
+          h="calc(100vh - 60px)" 
+          borderRight="1px" 
+          borderColor="gray.200"
         >
-          Subscriptions
-        </Text>
-        {subscriptions.length === 0 && (
-          <Text
-            fontSize="3xl"
-            fontWeight="bold"
-            textAlign="center"
-            color="gray.500"
-          >
-            No subscriptions available
-          </Text>
-        )}
-        <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} spacing={10} gap={4} w="full">
-          {subscriptions.map((sub) => (
-            <SubscriptionCard key={sub._id} subscription={sub} />
-          ))}
-        </SimpleGrid>
-      </VStack>
-    </Container>
+          <Sidebar />
+        </Box>
+        
+       
+        <Box flex="1" p={{ base: 4, md: 8 }}>
+          <VStack spacing={8} align="stretch">
+           
+            
+            {subscriptions.length === 0 && (
+              <Text
+                fontSize={{ base: "2xl", md: "4xl" }}
+                fontWeight="bold"
+                textAlign="center"
+                bgGradient="linear(to-l, #7928CA, #FF0080)"
+                bgClip="text"
+              >
+                No subscriptions available
+              </Text>
+            )}
+            
+            <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} spacing={20} gap={6} w={"full"}>
+              {subscriptions.map((sub) => (
+                <SubscriptionCard key={sub._id} subscription={sub} />
+              ))}
+            </SimpleGrid>
+          </VStack>
+        </Box>
+      </Flex>
+    </Box>
   );
 };
 

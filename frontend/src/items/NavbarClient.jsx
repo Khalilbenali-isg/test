@@ -11,7 +11,6 @@ const Navbar = () => {
   const location = useLocation();
   const { toggleColorMode } = useColorMode();
 
-  
   useEffect(() => {
     loadUserFromToken();
   }, []);
@@ -19,15 +18,12 @@ const Navbar = () => {
   const bg = useColorModeValue("white", "gray.800");
   const color = useColorModeValue("white", "gray.800");
 
-  
   const handleScroll = (sectionId) => {
     if (location.pathname !== "/home") {
-     
       navigate("/home", {
         state: { scrollTo: sectionId }
       });
     } else {
-      
       const element = document.getElementById(sectionId);
       if (element) {
         element.scrollIntoView({ behavior: 'smooth' });
@@ -35,7 +31,6 @@ const Navbar = () => {
     }
   };
 
-  
   useEffect(() => {
     if (location.pathname === "/home" && location.state?.scrollTo) {
       const sectionId = location.state.scrollTo;
@@ -73,6 +68,15 @@ const Navbar = () => {
         <Text variant="link" cursor="pointer" onClick={() => navigate("/UserProductsPage")}>
           My Products
         </Text>
+        <Text variant="link" cursor="pointer" onClick={() => navigate("/games")}>
+          games
+        </Text>
+        
+        {loggedInUser?.role === "admin" && (
+          <Text variant="link" cursor="pointer" onClick={() => navigate("/")}>
+            Dashboard
+          </Text>
+        )}
       </Flex>
 
       {loggedInUser ? (

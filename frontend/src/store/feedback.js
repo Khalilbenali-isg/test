@@ -1,4 +1,4 @@
-// src/store/feedbackStore.js
+
 import { create } from 'zustand';
 
 const useFeedbackStore = create((set) => ({

@@ -24,7 +24,7 @@ const transporter = nodemailer.createTransport({
 const sendVerificationEmail = async (email, code) => {
   try {
     const mailOptions = {
-      from: `"Your App Name" <${process.env.EMAIL_USER}>`,
+      from: `"Auto plant" <${process.env.EMAIL_USER}>`,
       to: email,
       subject: 'Verify Your Email',
       text: `Your verification code is: ${code}`,
@@ -45,7 +45,7 @@ const sendPasswordResetEmail = async (email, resetToken) => {
   const resetUrl = `${process.env.FRONTEND_URL}/reset-password/${resetToken}`;
   
   const mailOptions = {
-    from: `"E-plant" <${process.env.EMAIL_USER}>`,
+    from: `"Auto plant" <${process.env.EMAIL_USER}>`,
     to: email,
     subject: 'Password Reset Request',
     text: `You requested a password reset. Please click on the following link to reset your password: ${resetUrl}. This link will expire in 1 hour.`,

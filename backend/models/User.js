@@ -25,8 +25,8 @@ const userSchema = new mongoose.Schema({
 }, { timestamps: true });
 
 
-userSchema.index({ verificationCode: 1 }); // Faster verification
-userSchema.index({ Verified: 1 }); // Faster login checks
+userSchema.index({ verificationCode: 1 }); 
+userSchema.index({ Verified: 1 }); 
 
 const User = mongoose.model('User', userSchema);
 export default User;

@@ -4,6 +4,7 @@ import { Container, VStack, Heading, Box, Input, Button, Text } from '@chakra-ui
 import { Toaster, toaster } from "@/components/ui/toaster";
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import NavbarClient from "@/items/NavbarClient";
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState('');
@@ -47,6 +48,7 @@ const ForgotPassword = () => {
 
   return (
     <Container maxW="container.sm">
+      <NavbarClient />
       <VStack spacing={8} py={10}>
         <Heading as={"h1"} size={"xl"} textAlign={"center"} mb={4}>
           Reset Your Password

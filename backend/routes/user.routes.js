@@ -17,7 +17,7 @@ import upload from '../middleware/uploadMiddleware.js';
 
 const router = express.Router();
 
-// Public routes
+
 router.post('/',upload.single('image'), createUser);  
 router.post('/login', loginUser);  
 router.post('/verify', verifyUser);  

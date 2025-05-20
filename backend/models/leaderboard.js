@@ -9,7 +9,7 @@ const leaderboardSchema = new mongoose.Schema({
   game: {
     type: String,
     required: true,
-    enum: ['crossword', 'puzzle', 'memory', 'custom'], 
+    enum: ['crossword', 'puzzle', 'quiz', 'custom'], 
     default: 'custom'
   },
   score: {

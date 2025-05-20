@@ -11,11 +11,15 @@ import {
   Alert,
   Spinner,
   VStack,
+  Box,
+  Flex,
 } from "@chakra-ui/react";
 import { LuCheck, LuX } from "react-icons/lu";
 import { useEffect, useState } from "react";
 import useFeedbackStore from "@/store/feedback";
 import { toaster, Toaster } from "@/components/ui/toaster"; 
+import NavbarClient from "@/items/NavbarClient";
+import Sidebar from "@/items/Sidebar";
 
 const AdminFeedbackPage = () => {
   const {
@@ -25,7 +29,6 @@ const AdminFeedbackPage = () => {
     fetchFeedbacks,
     approveFeedback,
     deleteFeedback,
-    
     setFeedbacks,
   } = useFeedbackStore();
 
@@ -69,73 +72,96 @@ const AdminFeedbackPage = () => {
   const pendingFeedbacks = feedbacks.filter((fb) => !fb.Verified);
 
   return (
-    <VStack spacing={6} p={6}>
-      <Toaster /> 
+    <Box>
+      
+      <Box  >
+        <NavbarClient />
+      </Box>
+      
+      
+      <Flex>
+        
+        <Box 
+          position="sticky" 
+          top="0" 
+          height="calc(100vh - 60px)" 
+          overflowY="auto"
+        >
+          <Sidebar />
+        </Box>
 
-      {loading && <Spinner size="xl" />}
-      {error && (
-        <Alert.Root status="error">
-          <Alert.Indicator />
-          <Alert.Content>
-            <Alert.Title>Erreur</Alert.Title>
-            <Alert.Description>{error}</Alert.Description>
-          </Alert.Content>
-        </Alert.Root>
-      )}
+      
+        <Box flex="1" p={6}>
+          <Toaster />
 
-      {pendingFeedbacks.map((fb) => {
-        const user = getUserById(fb.userId);
-        return (
-          <Card.Root key={fb._id} width="100%" maxW="500px">
-            <Card.Body>
-              <HStack mb="6" gap="3">
-                <Avatar.Root>
-                  <Avatar.Image src={user?.image} />
-                  <Avatar.Fallback name={user?.name || "Utilisateur"} />
-                </Avatar.Root>
-                <Stack gap="0">
-                  <Text fontWeight="semibold" textStyle="sm">
-                    {user?.name || "Utilisateur inconnu"}
-                  </Text>
-                  <Text color="fg.muted" textStyle="sm">
-                    {user?.email || "Email inconnu"}
-                  </Text>
-                </Stack>
-              </HStack>
-              <Card.Description>
-                <Strong color="fg">{user?.name || "Un utilisateur"}</Strong> a
-                laissé un feedback :
-                <br />
-                <Text mt="2" color="fg.muted">
-                  "{fb.message}"
-                </Text>
-              </Card.Description>
-            </Card.Body>
+          <VStack spacing={6} align="start" width="100%">
+            {loading && <Spinner size="xl" />}
+            {error && (
+              <Alert.Root status="error">
+                <Alert.Indicator />
+                <Alert.Content>
+                  <Alert.Title>Erreur</Alert.Title>
+                  <Alert.Description>{error}</Alert.Description>
+                </Alert.Content>
+              </Alert.Root>
+            )}
 
-            <Card.Footer>
-              <Button
-                variant="subtle"
-                colorPalette="red"
-                flex="1"
-                onClick={() => handleDelete(fb._id)}
-              >
-                <LuX />
-                Refuser
-              </Button>
-              <Button
-                variant="subtle"
-                colorPalette="blue"
-                flex="1"
-                onClick={() => handleApprove(fb._id)}
-              >
-                <LuCheck />
-                Approuver
-              </Button>
-            </Card.Footer>
-          </Card.Root>
-        );
-      })}
-    </VStack>
+            {pendingFeedbacks.map((fb) => {
+              const user = getUserById(fb.userId);
+              return (
+                <Card.Root key={fb._id} width="100%" maxW="500px">
+                  <Card.Body>
+                    <HStack mb="6" gap="3">
+                      <Avatar.Root>
+                        <Avatar.Image src={user?.image} />
+                        <Avatar.Fallback name={user?.name || "Utilisateur"} />
+                      </Avatar.Root>
+                      <Stack gap="0">
+                        <Text fontWeight="semibold" textStyle="sm">
+                          {user?.name || "Utilisateur inconnu"}
+                        </Text>
+                        <Text color="fg.muted" textStyle="sm">
+                          {user?.email || "Email inconnu"}
+                        </Text>
+                      </Stack>
+                    </HStack>
+                    <Card.Description>
+                      <Strong color="fg">{user?.name || "Un utilisateur"}</Strong> a
+                      laissé un feedback :
+                      <br />
+                      <Text mt="2" color="fg.muted">
+                        "{fb.message}"
+                      </Text>
+                    </Card.Description>
+                  </Card.Body>
+
+                  <Card.Footer>
+                    <Button
+                      variant="subtle"
+                      colorPalette="red"
+                      flex="1"
+                      onClick={() => handleDelete(fb._id)}
+                    >
+                      <LuX />
+                      Refuser
+                    </Button>
+                    <Button
+                      variant="subtle"
+                      colorPalette="blue"
+                      flex="1"
+                      onClick={() => handleApprove(fb._id)}
+                    >
+                      <LuCheck />
+                      Approuver
+                    </Button>
+                  </Card.Footer>
+                </Card.Root>
+              );
+            })}
+          </VStack>
+        </Box>
+      </Flex>
+    </Box>
   );
 };
 

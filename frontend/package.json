@@ -19,6 +19,7 @@
     "dayjs": "^1.11.13",
     "framer-motion": "^12.6.5",
     "jwt-decode": "^4.0.0",
+    "next-reveal": "^1.0.6",
     "next-themes": "^0.4.4",
     "react": "^19.0.0",
     "react-crossword": "^0.2.0",

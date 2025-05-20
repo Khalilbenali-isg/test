@@ -5,7 +5,8 @@ import { Toaster, toaster } from "@/components/ui/toaster";
 import React, { useState, useEffect } from 'react';
 import { Link, useParams, useNavigate } from 'react-router-dom';
 import { FaRegEye, FaEyeSlash } from "react-icons/fa";
-import { Alert } from "@chakra-ui/react"
+import { Alert } from "@chakra-ui/react";
+import NavbarClient from "@/items/NavbarClient";
 
 const ResetPassword = () => {
   const { token } = useParams();
@@ -123,6 +124,7 @@ const ResetPassword = () => {
 
   return (
     <Container maxW="container.sm">
+      <NavbarClient />
       <VStack spacing={8} py={10}>
         <Heading as="h1" size="xl" textAlign="center" mb={4}>
           Set New Password

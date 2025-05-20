@@ -114,7 +114,7 @@ export const getProductById = async (req, res) => {
             });
         }
 
-        // Transform image path to full URL
+        
         const productResponse = product.toObject();
         productResponse.Image = product.Image 
             ? `/api/products/image/${path.basename(product.Image)}` 
@@ -251,7 +251,7 @@ export const deleteProduct = async(req, res) => {
             });
         }
 
-        // Remove the associated image file
+       
         if (deletedProduct.Image) {
             try {
                 fs.unlinkSync(deletedProduct.Image);

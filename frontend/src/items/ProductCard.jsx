@@ -38,12 +38,12 @@ const ProductCard = ({product}) => {
     const bg = useColorModeValue("gray.100","gray.700");
     const {deleteProduct, updateProduct} = useProductStore();
 
-    // Debugging: Log the product data
+    
     useEffect(() => {
         
     }, [product]);
 
-    // Clean up object URLs to prevent memory leaks
+   
     useEffect(() => {
         return () => {
             if (imagePreview) {
@@ -56,10 +56,10 @@ const ProductCard = ({product}) => {
         const file = e.target.files[0];
         if (!file) return;
 
-        // Store the file object
+        
         setImageFile(file);
         
-        // Create and set preview URL
+        
         const previewUrl = URL.createObjectURL(file);
         setImagePreview(previewUrl);
     };
@@ -69,7 +69,7 @@ const ProductCard = ({product}) => {
     };
 
     const handleDeleteProduct = async (e, pid) => {
-        // Stop event propagation
+        
         e.stopPropagation();
         
         const {success, message} = await deleteProduct(pid);
@@ -91,7 +91,7 @@ const ProductCard = ({product}) => {
     };
 
     const handleUpdateProduct = async (pid) => {
-        // Validate inputs
+       
         if (!updatedProduct.name || !updatedProduct.price) {
             toaster.create({
                 title: "Error",
@@ -105,7 +105,7 @@ const ProductCard = ({product}) => {
         setIsSubmitting(true);
     
         try {
-            // Create product data with explicit type conversion
+            
             const productData = {
                 name: updatedProduct.name,
                 price: Number(updatedProduct.price),
@@ -113,11 +113,11 @@ const ProductCard = ({product}) => {
                 stock: Number(updatedProduct.stock || 0)
             };
     
-            // Only add image if a new one was selected
+            
             if (imageFile) {
                 productData.Image = imageFile;
             } else {
-                // Keep the existing image path if no new image was selected
+                
                 productData.existingImagePath = product.Image;
             }
     
@@ -144,7 +144,7 @@ const ProductCard = ({product}) => {
                     isClosable: true
                 });
                 
-                // Reset image preview after successful update
+               
                 if (imagePreview) {
                     URL.revokeObjectURL(imagePreview);
                     setImagePreview(null);

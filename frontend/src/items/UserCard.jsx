@@ -33,7 +33,7 @@ const UserCard = ({ user }) => {
   const bg = useColorModeValue('white', 'gray.700')
   const { deleteUser, updateUser } = useUserStore()
 
-  // Clean up object URLs to prevent memory leaks
+  
   useEffect(() => {
     return () => {
       if (imagePreview) {
@@ -46,10 +46,10 @@ const UserCard = ({ user }) => {
     const file = e.target.files[0];
     if (!file) return;
 
-    // Store the file object
+    
     setImageFile(file);
     
-    // Create and set preview URL
+   
     const previewUrl = URL.createObjectURL(file);
     setImagePreview(previewUrl);
   };
@@ -79,7 +79,7 @@ const UserCard = ({ user }) => {
   }
 
   const handleUpdateUser = async (userId) => {
-    // Validate inputs
+    
     if (!updatedUser.name || !updatedUser.email) {
       toaster.create({
         title: 'Error',
@@ -93,7 +93,7 @@ const UserCard = ({ user }) => {
     setIsSubmitting(true);
   
     try {
-      // Create form data for the update
+      
       const formData = new FormData();
       formData.append('name', updatedUser.name);
       formData.append('email', updatedUser.email);
@@ -102,12 +102,12 @@ const UserCard = ({ user }) => {
       }
       formData.append('role', updatedUser.role);
       
-      // Only add image if a new one was selected
+      
       if (imageFile) {
         formData.append('image', imageFile);
       }
   
-      // Log what's being sent
+      
       console.log('Sending form data:');
       for (let [key, value] of formData.entries()) {
         console.log(key, value);
@@ -123,13 +123,13 @@ const UserCard = ({ user }) => {
           isClosable: true,
         });
         
-        // Update local state with the returned user data
+        
         setUpdatedUser({
           ...updatedUserData,
-          password: '' // Clear password field after update
+          password: '' 
         });
         
-        // Reset image preview after successful update
+        
         if (imagePreview) {
           URL.revokeObjectURL(imagePreview);
           setImagePreview(null);

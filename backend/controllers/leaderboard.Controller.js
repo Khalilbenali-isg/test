@@ -4,16 +4,34 @@ import User from '../models/User.js';
 export const addScore = async (req, res) => {
   try {
     const { game, score, timeTaken } = req.body;
-    const userId = req.user.id; 
+    const userId = req.user.id;
 
-    const newScore = await Leaderboard.create({
+    
+    let existingScore = await Leaderboard.findOne({
       userId,
-      game,
-      score,
-      timeTaken
+      game
     });
 
-    res.status(201).json(newScore);
+    if (existingScore) {
+      
+      existingScore.score += score;
+      
+      
+      existingScore.timeTaken = timeTaken;
+      
+      await existingScore.save();
+      res.status(200).json(existingScore);
+    } else {
+      
+      const newScore = await Leaderboard.create({
+        userId,
+        game,
+        score,
+        timeTaken
+      });
+      
+      res.status(201).json(newScore);
+    }
   } catch (err) {
     res.status(500).json({ message: 'Error adding score', error: err.message });
   }

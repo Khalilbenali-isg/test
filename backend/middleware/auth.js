@@ -1,8 +1,6 @@
 import jwt from 'jsonwebtoken';
 
-/**
- * Middleware to check if user is authenticated
- */
+
 export const checkAuth = (req, res, next) => {
   
   const token = req.header('Authorization')?.replace('Bearer ', '');
@@ -33,9 +31,9 @@ export const checkAuth = (req, res, next) => {
  */
 export const checkRole = (roles) => {
   return (req, res, next) => {
-    // checkAuth should be used before this middleware
-    console.log('User object:', req.user); // Add this line
-    console.log('User role:', req.user?.role); // Add this line
+    
+    console.log('User object:', req.user); 
+    console.log('User role:', req.user?.role); 
     if (!req.user) {
       return res.status(401).json({ 
         success: false, 
@@ -45,7 +43,7 @@ export const checkRole = (roles) => {
 
     const userRole = req.user.role;
     
-    // If roles is a string, convert to array
+   
     const requiredRoles = Array.isArray(roles) ? roles : [roles];
     
     if (requiredRoles.includes(userRole)) {

@@ -34,6 +34,10 @@ import { useUserStore } from './store/user';
 
 import { ProtectedRoute, RoleProtectedRoute } from './pages/ProtectedRoute';
 import DashboardPage from "./pages/DashboardPage.jsx"
+import CrosswordGame from './games/CrosswordGame.jsx'
+import QuizGame from "./games/QuizGame.jsx"
+import GamePage from "./games/GamePage.jsx"
+
 
 
 
@@ -43,7 +47,7 @@ function App() {
   const { loadUserFromToken } = useUserStore();
 
   useEffect(() => {
-    // Try to load user from token when app starts
+  
     loadUserFromToken();
   }, [loadUserFromToken]);
 
@@ -56,7 +60,7 @@ function App() {
         gap={4}
         >
           
-        <Sidebar />
+        
        
         
       
@@ -69,6 +73,10 @@ function App() {
           <Route path="/checkout" element={<Checkout />} />
           <Route path="/store" element={<Store />} />
           <Route path="/admindashboard" element={<DashboardPage />} />
+          <Route path="/crossword/level-1" element={<CrosswordGame />} />
+          <Route path="/quiz" element={<QuizGame />} />
+          <Route path="/games" element={<GamePage />} />
+
           
           
           

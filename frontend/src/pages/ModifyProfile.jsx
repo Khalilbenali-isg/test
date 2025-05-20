@@ -12,6 +12,7 @@ import {
 import { useUserStore } from '@/store/user';
 import { useNavigate } from 'react-router-dom';
 import { Toaster, toaster } from "@/components/ui/toaster";
+import NavbarClient from '@/items/NavbarClient';
 
 const ModifyProfile = () => {
   const { loggedInUser, updateUser, loadUserFromToken, changePassword } = useUserStore();
@@ -209,6 +210,7 @@ const ModifyProfile = () => {
 
   return (
     <Container maxW="container.sm" py={12}>
+      <NavbarClient />
       <VStack spacing={8} align="stretch">
         <Text fontSize="2xl" fontWeight="bold" textAlign="center">
           Edit Profile

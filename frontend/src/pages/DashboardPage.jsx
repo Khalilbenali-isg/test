@@ -2,7 +2,6 @@
 import { useState, useEffect } from 'react'
 import { 
   Box, 
-  Container, 
   Flex, 
   Spinner, 
   Button,
@@ -12,7 +11,7 @@ import {
 import { AdminDashboard } from '../items/AdminDashboard'
 import NavbarClient from '@/items/NavbarClient'
 import { useColorModeValue } from '@/components/ui/color-mode';
-
+import Sidebar from '@/items/Sidebar'
 
 export default function DashboardPage() {
   const [dashboardData, setDashboardData] = useState(null)
@@ -45,52 +44,115 @@ export default function DashboardPage() {
 
   if (loading) {
     return (
-      <Flex justify="center" align="center" minH="100vh">
-        <Spinner 
-          thickness="4px"
-          speed="0.65s"
-          emptyColor="gray.200"
-          color="blue.500"
-          size="xl"
-        />
-      </Flex>
+      <Box>
+        <NavbarClient />
+        <Flex>
+         
+          <Box 
+            w={{ base: "70px", md: "250px" }} 
+            position="sticky"
+            top="0"
+            h="calc(100vh - 60px)" 
+            borderRight="1px" 
+            borderColor="gray.200"
+          >
+            <Sidebar />
+          </Box>
+          
+         
+          <Flex 
+            flex="1" 
+            justify="center" 
+            align="center" 
+            minH="calc(100vh - 60px)"
+          >
+            <Spinner 
+              thickness="4px"
+              speed="0.65s"
+              emptyColor="gray.200"
+              color="blue.500"
+              size="xl"
+            />
+          </Flex>
+        </Flex>
+      </Box>
     )
   }
 
   if (error) {
     return (
-      <Flex justify="center" align="center" minH="100vh" px={4}>
-        <Box 
-          borderWidth="1px"
-          borderRadius="md"
-          borderColor={errorBorder}
-          bg={errorBg}
-          p={6}
-          maxW="md"
-          width="full"
-          textAlign="center"
-        >
-          <Heading size="md" mb={2} color="red.500">
-            Error Loading Dashboard
-          </Heading>
-          <Text mb={4}>{error}</Text>
-          <Button 
-            colorScheme="red" 
-            variant="outline"
-            onClick={() => window.location.reload()}
-            width="full"
+      <Box>
+        <NavbarClient />
+        <Flex>
+         
+          <Box 
+            w={{ base: "70px", md: "250px" }} 
+            position="sticky"
+            top="0"
+            h="calc(100vh - 60px)" 
+            borderRight="1px" 
+            borderColor="gray.200"
           >
-            Try Again
-          </Button>
-        </Box>
-      </Flex>
+            <Sidebar />
+          </Box>
+          
+         
+          <Flex 
+            flex="1" 
+            justify="center" 
+            align="center" 
+            p={4}
+          >
+            <Box 
+              borderWidth="1px"
+              borderRadius="md"
+              borderColor={errorBorder}
+              bg={errorBg}
+              p={6}
+              maxW="md"
+              width="full"
+              textAlign="center"
+            >
+              <Heading size="md" mb={2} color="red.500">
+                Error Loading Dashboard
+              </Heading>
+              <Text mb={4}>{error}</Text>
+              <Button 
+                colorScheme="red" 
+                variant="outline"
+                onClick={() => window.location.reload()}
+                width="full"
+              >
+                Try Again
+              </Button>
+            </Box>
+          </Flex>
+        </Flex>
+      </Box>
     )
   }
 
   return (
-    <Container maxW="container.xl" px={4} py={8}>
+    <Box>
       <NavbarClient />
-      {dashboardData && <AdminDashboard dashboardData={dashboardData} />}
-    </Container>
+      <Flex>
+        
+        <Box 
+          w={{ base: "70px", md: "250px" }} 
+          position="sticky"
+          top="0"
+          h="calc(100vh - 60px)" 
+          borderRight="1px" 
+          borderColor="gray.200"
+        >
+          <Sidebar />
+        </Box>
+        
+       
+        <Box flex="1" p={{ base: 4, md: 8 }}>
+          {dashboardData && <AdminDashboard dashboardData={dashboardData} />}
+        </Box>
+      </Flex>
+    </Box>
   )
 }

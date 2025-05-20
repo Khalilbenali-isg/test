@@ -10,6 +10,10 @@ import FeedbackCard from "@/items/FeedbackCard";
 import { useNavigate } from "react-router-dom";
 import FeedbackPopoverForm from "@/items/FeedbackPopoverForm";
 import { Toaster, toaster } from "@/components/ui/toaster"
+import { RevealWrapper } from  'next-reveal'
+import Slider from "react-slick";
+import "slick-carousel/slick/slick.css"; 
+import "slick-carousel/slick/slick-theme.css";
 
 
 const HomePageClt = () => {
@@ -69,42 +73,148 @@ const HomePageClt = () => {
     }
   };
 
+  const sliderSettings = {
+    dots: true,
+    infinite: true,
+    speed: 1000, 
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    autoplay: true,
+    autoplaySpeed: 5000,
+    arrows: true,
+    fade: false, 
+    cssEase: 'cubic-bezier(0.645, 0.045, 0.355, 1)' 
+  };
+
   
-  
+  const slides = [
+    {
+      image: "homeimage1.webp",
+      title: "Premium Quality Products",
+      description: "Grow Green with Tech – Intelligent Plant Care at Your Fingertips.",
+      buttonText: "Shop Now",
+      buttonColor: "teal",
+      buttonAction: () => navigate("/store")
+    },
+    {
+      image: "homeimage2.webp",
+      title: "Summer Collection 2023",
+      description: "Smart Plants, Smarter Living – Auto Spray & Heat Control for Effortless Growth!",
+      buttonText: "View Collection",
+      buttonColor: "blue",
+      buttonAction: () => document.getElementById('products').scrollIntoView({ behavior: 'smooth' })
+    },
+    {
+      image: "DALL·E 2025-05-19 11.52.34 - A visually stunning homepage slider image for an e-commerce website that sells plants and roses. The image shows a vibrant plant nursery setting with .webp",
+      title: "Sign up today",
+      description: "sign un and enjoy all the site features",
+      buttonText: "Join Now",
+      buttonColor: "purple",
+      buttonAction: () => navigate("/users/create")
+    }
+  ];
 
   return (
     <>
       <NavbarClient />
-      <Box as="section" id="home" py={20} >
-        <Container maxW="container.xl">
-          <Flex align="center" justify="space-between" flexDir={{ base: "column", md: "row" }}>
-            
-            <Image src="https://cheekyplantco.com.au/cdn/shop/files/cheekyplantco_sq_primarylogo_cloudonfern_1200x1200.png?v=1695033305" alt="Company" boxSize="400px" borderRadius="xl" />
-            <Box ml={{ md: 10 }} mt={{ base: 6, md: 0 }}>
-              <Text fontSize="4xl" fontWeight="bold" mb={4}>
-                Welcome to Our Company!
-              </Text>
-              <Text fontSize="lg" mb={6}>
-                We provide top-quality products and services tailored to your needs. Explore our range and see why clients trust us.
-              </Text>
-              <Button colorScheme="teal" size="lg" onClick={() => document.getElementById('products').scrollIntoView({ behavior: 'smooth' })}>
-                Discover Products
-              </Button>
+      <RevealWrapper origin='bottom' delay={0} duration={2000} distance='300px' reset={false}>
+      <Box as="section" id="home" position="relative" h="80vh" overflow="hidden">
+        <Slider {...sliderSettings}>
+          {slides.map((slide, index) => (
+            <Box key={index} h="80vh" position="relative">
+              <Image 
+                src={slide.image} 
+                alt={`Slide ${index + 1}`} 
+                w="100%" 
+                h="100%" 
+                objectFit="cover"
+                borderRadius={"xl"}
+                boxShadow={"xl"}
+                opacity={0.7}
+              />
+              <Container 
+                maxW="container.xl" 
+                position="absolute" 
+                top="50%" 
+                left="50%" 
+                transform="translate(-50%, -50%)"
+                textAlign="center"
+                zIndex="1"
+              >
+                <Text 
+                  fontSize={{ base: "3xl", md: "5xl", lg: "6xl" }} 
+                  fontWeight="bold" 
+                  mb={4}
+                  textShadow="2px 2px 4px rgba(0,0,0,0.5)"
+                >
+                  {slide.title}
+                </Text>
+                <Text 
+                  fontSize={{ base: "lg", md: "xl", lg: "2xl" }} 
+                  mb={8}
+                  maxW="2xl"
+                  mx="auto"
+                  textShadow="1px 1px 2px rgba(0,0,0,0.5)"
+                >
+                  {slide.description}
+                </Text>
+                <Button 
+                  colorScheme={slide.buttonColor} 
+                  size="lg" 
+                  onClick={slide.buttonAction}
+                  px={8}
+                  fontSize="lg"
+                  _hover={{ transform: 'scale(1.05)' }}
+                  transition="all 0.2s"
+                >
+                  {slide.buttonText}
+                </Button>
+              </Container>
             </Box>
-          </Flex>
-        </Container>
+          ))}
+        </Slider>
+        
+       
+        <style jsx global>{`
+          .slick-prev, .slick-next {
+            width: 40px;
+            height: 40px;
+            z-index: 10;
+          }
+          .slick-prev:before, .slick-next:before {
+            font-size: 40px;
+            opacity: 0.7;
+          }
+          .slick-prev {
+            left: 25px;
+          }
+          .slick-next {
+            right: 25px;
+          }
+          .slick-dots {
+            bottom: 20px;
+          }
+          .slick-dots li button:before {
+            font-size: 12px;
+            color: white;
+          }
+        `}</style>
       </Box>
-
+      </RevealWrapper>
      <Box as="section" id="products" py={20} >
   <Container maxW="container.xl">
+  <RevealWrapper origin='bottom' delay={0} duration={1000} distance='50px' reset={true} > 
     <Text fontSize="4xl" fontWeight="bold" mb={10} textAlign="center">
       Our Top Products
     </Text>
+    </RevealWrapper>
+    <RevealWrapper origin='bottom' delay={0} duration={2000} distance='50px' reset={true} > 
     <SimpleGrid columns={{ base: 1, md: 3 }} spacing={10} gap={10}>
       {randomProducts.map((product) => (
         <ProductCardClt key={product._id} product={product} />
       ))}
     </SimpleGrid>
+    </RevealWrapper>
   </Container>
 </Box>
       
@@ -116,11 +226,12 @@ const HomePageClt = () => {
       
       <Box as="section" id="feedback" py={20} >
         <Container maxW="container.xl"  >
+        <RevealWrapper origin='left' delay={0} duration={1000} distance='50px' reset={true} > 
           <Text fontSize="4xl" fontWeight="bold" mb={10} textAlign="center">
             What Our Clients Say
           </Text>
-          
-         
+          </RevealWrapper>
+          <RevealWrapper origin='right' delay={0} duration={2000} distance='50px' reset={true} > 
           <SimpleGrid columns={{ base: 1, md: 3 }} spacing={10} mb={16} gap={10}>
           {randomFeedbacks.length > 0 ? (
               randomFeedbacks.map((feedback) => (
@@ -132,26 +243,27 @@ const HomePageClt = () => {
               </Box>
             )}
           </SimpleGrid>
+          </RevealWrapper>
           <Flex align="center" justify="center" flexDir={{ base: "column", md: "row" }}> 
             <FeedbackPopoverForm  />
            </Flex>
-          
-
-          
           
         </Container>
       </Box>
 
       <Box as="section" id="about" py={20} >
+      <RevealWrapper opacity={0}  duration={800} delay={0} easing="ease-in-out" reset={true}>
         <Container maxW="container.lg" textAlign="center">
           <Text fontSize="4xl" fontWeight="bold" mb={6}>
             About Us
           </Text>
           <Text fontSize="lg">
-            Our company has been at the forefront of innovation, providing reliable products that meet customer demands. We believe in
-            quality, integrity, and long-term partnerships.
+          We are a passionate Tunisian team on a mission to make plant care effortless for everyone. By combining technology and nature, we create smart automation systems that help your plants thrive—whether you're a beginner or an expert. With our solutions, you can enjoy the beauty and benefits of plants without the stress of daily maintenance.
+
+Grow smarter, live greener
           </Text>
         </Container>
+        </RevealWrapper>
       </Box>
 
       <Box as="footer" id="footer" py={10}>
