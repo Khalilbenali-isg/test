@@ -33,7 +33,6 @@ export const getUserProducts = async (req, res) => {
   }
 
   try {
-
     const userProducts = await UserProduct.find({ userId })
       .populate('productId')
       .populate('subscriptionId')
@@ -47,13 +46,15 @@ export const getUserProducts = async (req, res) => {
       });
     }
 
- 
     const formattedProducts = userProducts.map(userProduct => ({
       _id: userProduct._id,
       userId: userProduct.userId,
       quantity: userProduct.quantity,
       purchasedAt: userProduct.purchasedAt,
       expiresAt: userProduct.expiresAt,
+      status: userProduct.status,
+      deliveryStartedAt: userProduct.deliveryStartedAt,
+      deliveredAt: userProduct.deliveredAt,
       product: userProduct.productId,
       subscription: userProduct.subscriptionId
     }));

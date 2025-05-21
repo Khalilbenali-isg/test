@@ -290,7 +290,7 @@ export const deleteProduct = async(req, res) => {
 
 export const purchaseProduct = async (req, res) => {
     const { id } = req.params;
-    const { userId, subscriptionId , quantity = 1 } = req.body;
+    const { userId, subscriptionId, quantity = 1 } = req.body;
   
     try {
       const product = await Product.findById(id);
@@ -315,7 +315,6 @@ export const purchaseProduct = async (req, res) => {
         }
       }
   
-      
       const userProduct = new UserProduct({
         userId,
         productId: id,
@@ -323,9 +322,28 @@ export const purchaseProduct = async (req, res) => {
         quantity, 
         purchasedAt: new Date(),
         expiresAt,
+        status: 'delivery',
+        deliveryStartedAt: new Date()
       });
   
       await userProduct.save();
+  
+      // Schedule status update after 3 days
+      setTimeout(async () => {
+        try {
+          const updatedProduct = await UserProduct.findByIdAndUpdate(
+            userProduct._id,
+            { 
+              status: 'delivered',
+              deliveredAt: new Date() 
+            },
+            { new: true }
+          );
+          console.log(`Updated product ${userProduct._id} status to delivered`);
+        } catch (err) {
+          console.error('Error updating product status:', err);
+        }
+      }, 30*  1000); // 3 days in milliseconds
   
       res.json({
         success: true,

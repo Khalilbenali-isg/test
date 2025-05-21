@@ -153,33 +153,46 @@ export const useProductStore = create((set) => ({
         return { success: false, message: "Error updating product" };
     }
 },
-  purchaseProduct: async (pid, quantity = 1, userId, subscriptionId) => {
-    try {
-      const res = await fetch(`/api/products/purchase/${pid}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          quantity,
-          userId,
-          subscriptionId,
-        }),
-      });
-  
-      const data = await res.json();
-      if (!data.success) return { success: false, message: data.message };
-  
-     
-      set((state) => ({
-        products: state.products.map((product) =>
-          product._id === pid ? { ...product, stock: data.newStock } : product
-        ),
-      }));
-  
-      return { success: true, message: data.message };
-    } catch (error) {
-      return { success: false, message: "Error purchasing product" };
-    }
-  },
+purchaseProduct: async (pid, quantity = 1, userId, subscriptionId) => {
+  try {
+    const token = localStorage.getItem('token');
+    const res = await fetch(`/api/products/${pid}/purchase`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`
+      },
+      body: JSON.stringify({
+        quantity,
+        userId,
+        subscriptionId,
+      }),
+    });
+
+    const data = await res.json();
+    if (!data.success) return { success: false, message: data.message };
+
+    // Update local state with the new product
+    set((state) => ({
+      userProducts: [...state.userProducts, {
+        _id: data.userProductId,
+        userId,
+        productId: pid,
+        subscriptionId,
+        quantity,
+        purchasedAt: new Date(),
+        status: 'delivery',
+        deliveryStartedAt: new Date(),
+        product: state.products.find(p => p._id === pid)
+      }],
+      products: state.products.map((product) =>
+        product._id === pid ? { ...product, stock: data.newStock } : product
+      ),
+    }));
+
+    return { success: true, message: data.message };
+  } catch (error) {
+    return { success: false, message: "Error purchasing product" };
+  }
+},
 }));

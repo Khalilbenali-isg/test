@@ -13,30 +13,17 @@ import relativeTime from 'dayjs/plugin/relativeTime';
 dayjs.extend(relativeTime);
 
 const UserProductCard = ({ userProduct }) => {
-  const { product, quantity, purchasedAt, expiresAt, subscription } = userProduct;
+  const { product, quantity, purchasedAt, expiresAt, subscription, status } = userProduct;
 
   const purchaseDate = dayjs(purchasedAt).format('DD MMM YYYY - HH:mm');
   const timeLeft = expiresAt ? dayjs().to(dayjs(expiresAt)) : '—';
   
-  console.log("UserProductCard", userProduct);
-  console.log("Product data:", product);
-  
-  
   const getImageUrl = () => {
     if (!product || !product.Image) return null;
-    
-    // Option 1: Direct URL based on ProductCard approach
-    //return `http://localhost:5173${product.Image}`;
-    
-    // Option 2: Use the backend direct uploads path
-     return `http://localhost:5000/${product.Image}`;
-    
-    // Option 3: Use the backend API path
-    // return `http://localhost:5000/api/products/image/${path.basename(product.Image)}`;
+    return `http://localhost:5000/${product.Image}`;
   };
   
   const imageUrl = getImageUrl();
-  console.log("Image URL:", imageUrl);
   
   return (
     <Box
@@ -72,8 +59,14 @@ const UserProductCard = ({ userProduct }) => {
           <Text fontSize="md" color="gray.600">€ {product?.price}</Text>
           <Text fontSize="sm" color="gray.500">Quantity: {quantity}</Text>
 
-          <HStack w="full" justifyContent="space-between">
-            <Badge colorScheme="blue">Bought: {purchaseDate}</Badge>
+          <HStack w="full" justifyContent="space-between" flexWrap="wrap">
+            <HStack>
+              <Badge colorScheme="blue">Bought: {purchaseDate}</Badge>
+              <Badge colorScheme={status === 'delivered' ? 'green' : 'yellow'}>
+                {status === 'delivered' ? 'Delivered' : 'In Delivery'}
+              </Badge>
+            </HStack>
+            
             {subscription ? (
               <Badge colorScheme="green">Expires {timeLeft}</Badge>
             ) : (
@@ -87,4 +80,3 @@ const UserProductCard = ({ userProduct }) => {
 };
 
 export default UserProductCard;
-

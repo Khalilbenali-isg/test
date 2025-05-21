@@ -8,6 +8,14 @@ const userProductSchema = new mongoose.Schema({
   quantity: { type: Number, default: 1 },
   purchasedAt: { type: Date, default: Date.now },
   expiresAt: { type: Date },
+  status: { 
+    type: String, 
+    enum: ['delivery', 'delivered'], 
+    default: 'delivery' 
+  },
+  // Add these fields for tracking delivery
+  deliveryStartedAt: { type: Date, default: Date.now },
+  deliveredAt: { type: Date }
 });
 
 const UserProduct = mongoose.model("UserProduct", userProductSchema);

@@ -37,6 +37,7 @@ import DashboardPage from "./pages/DashboardPage.jsx"
 import CrosswordGame from './games/CrosswordGame.jsx'
 import QuizGame from "./games/QuizGame.jsx"
 import GamePage from "./games/GamePage.jsx"
+import TestPlantRecognition from "./AI/TestPlantRecognition.jsx"
 
 
 
@@ -88,6 +89,7 @@ function App() {
           <Route path="/users/create" element={<RegistrationPage />} />
           <Route path="/users/login" element={<LoginPage />} />
           <Route path="/users/ModifyProfile" element={<ModifyProfile />} />
+          <Route path="/ai" element={<TestPlantRecognition />} />
           
          
          

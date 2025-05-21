@@ -1,0 +1,44 @@
+.plant-recognition {
+    text-align: center;
+    padding: 20px;
+  }
+  
+  .plant-recognition button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-bottom: 20px;
+  }
+  
+  .plant-recognition button:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+  }
+  
+  .image-preview {
+    margin: 20px 0;
+  }
+  
+  .predictions {
+    background-color: #f8f9fa;
+    padding: 15px;
+    border-radius: 8px;
+    text-align: left;
+    margin-top: 20px;
+  }
+  
+  .predictions h4 {
+    margin-top: 0;
+  }
+  
+  .predictions ul {
+    padding-left: 20px;
+  }
+  
+  .predictions li {
+    margin-bottom: 8px;
+  }

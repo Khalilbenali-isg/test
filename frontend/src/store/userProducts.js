@@ -14,7 +14,6 @@ export const useUserProductStore = create((set) => ({
     try {
       set({ loading: true, error: null });
       
-     
       const token = localStorage.getItem('token');
       
       if (!token) {
@@ -28,7 +27,6 @@ export const useUserProductStore = create((set) => ({
         }
       });
       
-     
       const contentType = res.headers.get("content-type");
       if (!contentType || !contentType.includes("application/json")) {
         set({ 

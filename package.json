@@ -12,6 +12,8 @@
   "description": "",
   "dependencies": {
     "@jaredreisinger/react-crossword": "^5.2.0",
+    "@teachablemachine/image": "^0.8.5",
+    "@tensorflow/tfjs": "^4.22.0",
     "bcryptjs": "^3.0.2",
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
