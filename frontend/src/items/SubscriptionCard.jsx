@@ -103,6 +103,16 @@ const SubscriptionCard = ({ subscription }) => {
                       }
                     />
                   </Field>
+                  <Field label="Duration">
+                    <Input
+                      placeholder="Duration"
+                      type="number"
+                      value={updatedSubscription.durationInDays}
+                      onChange={(e) =>
+                        setUpdatedSubscription({ ...updatedSubscription, price: e.target.value })
+                      }
+                    />
+                  </Field>
                   {Object.entries(updatedSubscription.options).map(([key, value]) => (
                     <Field label={`Option: ${key}`} key={key}>
                       <Button

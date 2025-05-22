@@ -14,6 +14,7 @@ const LinkItems = [
   { name: 'stats', icon: FiSettings, to: '/admindashboard' },
   { name: 'game', icon: FiSettings, to: '/game' },
   { name: 'gameselection', icon: FiSettings, to: '/games' },
+  { name: 'userproducts', icon: FiSettings, to: '/allproducts' },
 ];
 
 const Sidebar = () => {

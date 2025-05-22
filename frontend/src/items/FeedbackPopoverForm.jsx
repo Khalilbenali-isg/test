@@ -29,7 +29,7 @@ const FeedbackPopoverForm = () => {
       useEffect(() => {
         
         if (!isLoading && !loggedInUser) {
-          navigate("/users/login");
+          console.log("User not logged in");
           return;
         } else  {
           

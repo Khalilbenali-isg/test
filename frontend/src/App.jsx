@@ -38,6 +38,8 @@ import CrosswordGame from './games/CrosswordGame.jsx'
 import QuizGame from "./games/QuizGame.jsx"
 import GamePage from "./games/GamePage.jsx"
 import TestPlantRecognition from "./AI/TestPlantRecognition.jsx"
+import LeaderboardPage from "./pages/LeaderboardPage.jsx"
+import AdminBoughtProductsPage from "./pages/AdminBoughtProductsPage.jsx"
 
 
 
@@ -77,6 +79,8 @@ function App() {
           <Route path="/crossword/level-1" element={<CrosswordGame />} />
           <Route path="/quiz" element={<QuizGame />} />
           <Route path="/games" element={<GamePage />} />
+          <Route path="/leaderboard" element={<LeaderboardPage />} />
+          <Route path="/allproducts" element={<AdminBoughtProductsPage />} />
 
           
           

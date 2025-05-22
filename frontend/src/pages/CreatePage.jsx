@@ -113,6 +113,7 @@ const CreatePage = () => {
       }
     };
   }, [imagePreview]);
+  console.log("token", token);  
   
   return (
     <Box>

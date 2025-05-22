@@ -227,6 +227,7 @@ const UserCard = ({ user }) => {
                       name="email"
                       value={updatedUser.email}
                       onChange={(e) => setUpdatedUser({ ...updatedUser, email: e.target.value })}
+                      disabled 
                     />
                   </Field>
                   <Field label="Password">
